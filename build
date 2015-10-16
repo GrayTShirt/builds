@@ -1,0 +1,53 @@
+#!/bin/bash
+
+BASE=$(cd $(dirname ${BASH_SOURCE[0]}); pwd)
+declare -A VERSIONS
+VERSIONS[ctap]=2.0.0
+
+PACKAGES=()
+TARGETS=()
+
+while [[ $# != 0 ]]; do
+  case "${1}" in
+  (ctap|libvigor|libsodium|libzmq)
+    PACKAGES+=( $1 )
+    ;;
+  (*/*)
+    TARGETS+=( $1 )
+    ;;
+  (ubuntu)
+    TARGETS+=( debuild/precise )
+    TARGETS+=( debuild/trusty )
+    TARGETS+=( debuild/vivid )
+    ;;
+  (centos)
+    TARGETS+=( rpmbuild/centos5 )
+    TARGETS+=( rpmbuild/centos6 )
+    TARGETS+=( rpmbuild/centos7 )
+    ;;
+  (precise|trusty|vivid)
+    TARGETS+=( "debuild/${1}" )
+    ;;
+  (centos5|centos6|centos7)
+    TARGETS+=( "rpmbuild/${1}" )
+    ;;
+  esac
+  shift
+done
+
+if [[ ${#PACKAGES[@]} == 0 ]]; then
+  echo "building default packages"
+  PACKAGES=(ctap libvigor libsodium libzmq)
+fi
+if [[ ${#TARGETS[@]} == 0 ]]; then
+  echo "using default targets"
+  TARGETS=(debuild/{precise,trusty,vivid} rpmbuild/centos{5,6,7})
+fi
+
+for package in ${PACKAGES}; do
+  for target in ${TARGETS}; do
+    echo "building ${package} in ${target}"
+    docker run -it -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}
+    echo; echo; echo; echo;
+  done
+done
