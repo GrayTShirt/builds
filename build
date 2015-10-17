@@ -9,7 +9,7 @@ TARGETS=()
 
 while [[ $# != 0 ]]; do
   case "${1}" in
-  (ctap|libvigor|libsodium|libzmq)
+  (ctap|libvigor|libzmq)
     PACKAGES+=( $1 )
     ;;
   (*/*)
@@ -37,7 +37,7 @@ done
 
 if [[ ${#PACKAGES[@]} == 0 ]]; then
   echo "building default packages"
-  PACKAGES=(ctap libvigor libsodium libzmq)
+  PACKAGES=(ctap libvigor libzmq)
 fi
 if [[ ${#TARGETS[@]} == 0 ]]; then
   echo "using default targets"
