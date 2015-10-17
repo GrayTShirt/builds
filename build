@@ -44,8 +44,8 @@ if [[ ${#TARGETS[@]} == 0 ]]; then
   TARGETS=(debuild/{precise,trusty,vivid} rpmbuild/centos{5,6,7})
 fi
 
-for package in ${PACKAGES}; do
-  for target in ${TARGETS}; do
+for package in ${PACKAGES[@]}; do
+  for target in ${TARGETS[@]}; do
     echo "building ${package} in ${target}"
     docker run -it -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}
     echo; echo; echo; echo;
