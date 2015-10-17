@@ -2,6 +2,7 @@
 set -e
 
 BUILD=${BUILD:-1}
+BRANCH=${BRANCH:-master}
 if [[ -z "${DIST:-}" ]]; then
   echo >&2 "\$DIST not specified; aborting package build"
   exit 1
@@ -13,7 +14,7 @@ fi
 
 git clone https://github.com/filefrog/ctap
 cd ctap
-git checkout static
+git checkout ${BRANCH}
 ./bootstrap
 ./configure
 make dist
