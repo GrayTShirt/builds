@@ -1,0 +1,40 @@
+#!/bin/bash
+
+detect_dist() {
+  case "${1}" in
+  (*/precise/*) echo "ubuntu/precise" ;;
+  (*/trusty/*)  echo "ubuntu/trusty" ;;
+  (*/vivid/*)   echo "ubuntu/vivid" ;;
+  esac
+}
+
+last=""
+for file in "$@"; do
+  dist=$(detect_dist "${file}")
+
+  if [[ -n "${dist}" ]]; then
+    if [[ -n "${last}" && "${last}" != "${dist}" ]]; then
+      echo
+    fi
+    printf "%-14s %s\n" "${dist}" "${file}"
+    last=${dist}
+  else
+    echo >&2 "unrecognized os/dist for \`${file}'; skipping"
+  fi
+done
+
+echo -n "Look good? (yes/no) "
+read confirm
+if [[ "${confirm}" != "yes" && "${confirm}" != "y" ]]; then
+  echo >&2 "Bailing out"
+  exit 1
+fi
+
+echo "Continuing"
+for file in "$@"; do
+  dist=$(detect_dist ${file})
+  if [[ -n "${dist}" ]]; then
+    package_cloud push bolo/bolo/${dist} ${file}
+  fi
+done
+exit 0
