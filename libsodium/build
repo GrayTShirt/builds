@@ -1,0 +1,37 @@
+#!/bin/bash
+set -e
+
+BUILD=${BUILD:-1}
+if [[ -z "${DIST:-}" ]]; then
+  echo >&2 "\$DIST not specified; aborting package build"
+  exit 1
+fi
+if [[ -z "${VERSION:-}" ]]; then
+  echo >&2 "\$VERSION not specified; aborting package build"
+  exit 1
+fi
+
+git clone https://github.com/jedisct1/libsodium
+cd libsodium
+git checkout ${VERSION}
+./autogen.sh
+./configure
+make dist
+
+mkdir -p /tmp/d/work
+cp libsodium-${VERSION}.tar.gz /tmp/d/libsodium_${VERSION}.orig.tar.gz
+cp -a /srv/debian/ /tmp/d/work/debian
+
+cd /tmp/d/work
+tar -xz --strip-components 1 -f ../libsodium_${VERSION}.orig.tar.gz
+cat <<EOF > debian/changelog
+libsodium (${VERSION}-${BUILD}) ${DIST}; urgency=low
+
+  * package
+
+ -- Docker Packager <packages@niftylogic.com>  $(date +"%a, %d %b %Y %H:%M:00 %z")
+EOF
+
+debuild -i -us -uc -b
+mkdir -p /srv/${DIST}
+cp -a ../*.deb /srv/${DIST}

@@ -1,0 +1,63 @@
+Source: libsodium
+Standards-Version: 3.9.3
+Maintainer: James Hunt <james@jameshunt.us>
+Section: libs
+Priority: optional
+Homepage: http://github.com/jedisct1/libsodium
+Build-Depends: debhelper (>= 8.0.0),
+               libtool
+
+Package: libsodium13
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Modern cryptography library
+ Sodium is a modern, easy-to-use software library for encryption, decryption,
+ signatures, password hashing and more. It is a portable, cross-compilable,
+ installable, packageable fork of NaCl, with a compatible API, and an extended
+ API to improve usability even further. Its goal is to provide all of the core
+ operations needed to build higher-level cryptographic tools.
+ .
+ Sodium supports a variety of compilers and operating systems, including Windows
+ (with MinGW or Visual Studio, x86 and x64), iOS and Android. The design choices
+ emphasize security, and "magic constants" have clear rationales. And despite the
+ emphasis on high security, primitives are faster across-the-board than most
+ implementations of the NIST standards.
+
+Package: libsodium-dev
+Architecture: any
+Section: libdevel
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Modern cryptography library - development tools
+ Sodium is a modern, easy-to-use software library for encryption, decryption,
+ signatures, password hashing and more. It is a portable, cross-compilable,
+ installable, packageable fork of NaCl, with a compatible API, and an extended
+ API to improve usability even further. Its goal is to provide all of the core
+ operations needed to build higher-level cryptographic tools.
+ .
+ Sodium supports a variety of compilers and operating systems, including Windows
+ (with MinGW or Visual Studio, x86 and x64), iOS and Android. The design choices
+ emphasize security, and "magic constants" have clear rationales. And despite the
+ emphasis on high security, primitives are faster across-the-board than most
+ implementations of the NIST standards.
+ .
+ This package contains the header files for developing code against libsodium.
+
+Package: libsodium13-dbg
+Architecture: any
+Priority: extra
+Section: debug
+Depends: libsodium13 (= ${binary:Version}), ${misc:Depends}
+Description: Modern cryptography library - debugging symbols
+ Sodium is a modern, easy-to-use software library for encryption, decryption,
+ signatures, password hashing and more. It is a portable, cross-compilable,
+ installable, packageable fork of NaCl, with a compatible API, and an extended
+ API to improve usability even further. Its goal is to provide all of the core
+ operations needed to build higher-level cryptographic tools.
+ .
+ Sodium supports a variety of compilers and operating systems, including Windows
+ (with MinGW or Visual Studio, x86 and x64), iOS and Android. The design choices
+ emphasize security, and "magic constants" have clear rationales. And despite the
+ emphasis on high security, primitives are faster across-the-board than most
+ implementations of the NIST standards.
+ .
+ This package contains debugging symbols for libsodium.

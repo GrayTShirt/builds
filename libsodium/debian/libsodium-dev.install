@@ -1,0 +1,3 @@
+usr/include/sodium.h
+usr/lib/libsodium.a
+usr/lib/libsodium.so

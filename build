@@ -3,13 +3,15 @@
 BASE=$(cd $(dirname ${BASH_SOURCE[0]}); pwd)
 declare -A VERSIONS
 VERSIONS[ctap]=2.0.0
+VERSIONS[libsodium]=1.0.3
+VERSIONS[libvigor]=1.2.8
 
 PACKAGES=()
 TARGETS=()
 
 while [[ $# != 0 ]]; do
   case "${1}" in
-  (ctap|libvigor|libzmq)
+  (ctap|libsodium|libvigor|libzmq)
     PACKAGES+=( $1 )
     ;;
   (*/*)
@@ -37,7 +39,7 @@ done
 
 if [[ ${#PACKAGES[@]} == 0 ]]; then
   echo "building default packages"
-  PACKAGES=(ctap libvigor libzmq)
+  PACKAGES=(ctap libsodium libvigor libzmq)
 fi
 if [[ ${#TARGETS[@]} == 0 ]]; then
   echo "using default targets"
