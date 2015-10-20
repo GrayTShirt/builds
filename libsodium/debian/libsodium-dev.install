@@ -1,3 +1,4 @@
 usr/include/*
 usr/lib/libsodium.a
 usr/lib/libsodium.so
+usr/lib/pkgconfig
