@@ -12,6 +12,9 @@ if [[ -z "${VERSION:-}" ]]; then
   exit 1
 fi
 
+mkdir -p /srv/${DIST}
+
+cd ${HOME}
 git clone https://github.com/filefrog/ctap
 cd ctap
 git checkout ${BRANCH}
@@ -19,21 +22,28 @@ git checkout ${BRANCH}
 ./configure
 make dist
 
-mkdir -p /tmp/d/work
-cp ctap-${VERSION}.tar.gz /tmp/d/ctap_${VERSION}.orig.tar.gz
-cp -a debian/ /tmp/d/work/debian
+case ${FLAVOR} in
+(debuild)
+  cp ctap-${VERSION}.tar.gz ${HOME}/ctap_${VERSION}.orig.tar.gz
+  cp -a debian/ ${HOME}/debuild/debian
 
-cd /tmp/d/work
-tar -xz --strip-components 1 -f ../ctap_${VERSION}.orig.tar.gz
-cat <<EOF > debian/changelog
-ctap (${VERSION}-${BUILD}) ${DIST}; urgency=low
+  cd ${HOME}/debuild
+  tar -xz --strip-components 1 -f ../ctap_${VERSION}.orig.tar.gz
+  debuild -i -us -uc -b
+  cp -a ../*.deb /srv/${DIST}
+  ;;
 
-  * package
+(rpmbuild)
+  cp ctap-${VERSION}.tar.gz ${HOME}/rpm
+  rpmbuild -bb rpm.spec
+  cp -a ${HOME}/rpm/x86_64/*.rpm /srv/${DIST}
+  ;;
 
- -- Docker Packager <packages@niftylogic.com>  $(date +"%a, %d %b %Y %H:%M:00 %z")
-EOF
-debuild -i -us -uc -S
-(cd .. && mk-build-deps -ir ctap_${VERSION}-${BUILD}.dsc)
-debuild -i -us -uc -b
-mkdir -p /srv/${DIST}
-cp -a ../*.deb /srv/${DIST}
+(*)
+  echo >&2 "UNHANDLED FLAVOR \`${FLAVOR}'!"
+  exit 2
+  ;;
+esac
+
+echo "SUCCESS"
+exit 0
