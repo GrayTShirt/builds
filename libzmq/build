@@ -14,14 +14,14 @@ fi
 curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
 sudo apt-get install libsodium-dev libsodium13 pkg-config
 
-cd $HOME
+cd ${HOME}
 curl -sO http://download.zeromq.org/zeromq-${VERSION}.tar.gz
 
-mkdir -p $HOME/d/work
-cp zeromq-${VERSION}.tar.gz $HOME/d/zeromq_${VERSION}.orig.tar.gz
-cp -a /srv/debian/ $HOME/d/work/debian
+mkdir -p ${HOME}/d/work
+cp zeromq-${VERSION}.tar.gz ${HOME}/d/zeromq_${VERSION}.orig.tar.gz
+cp -a /srv/debian/ ${HOME}/d/work/debian
 
-cd $HOME/d/work
+cd ${HOME}/d/work
 tar -xz --strip-components 1 -f ../zeromq_${VERSION}.orig.tar.gz
 cat <<EOF > debian/changelog
 zeromq (${VERSION}-${BUILD}) ${DIST}; urgency=low
