@@ -16,7 +16,7 @@ TARGETS=()
 
 while [[ $# != 0 ]]; do
   case "${1}" in
-  (ctap|libsodium|libvigor|libzmq)
+  (ctap|libsodium|libvigor|libzmq|autotools)
     PACKAGES+=( $1 )
     ;;
   (*/*)
