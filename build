@@ -49,7 +49,7 @@ fi
 for package in ${PACKAGES[@]}; do
   for target in ${TARGETS[@]}; do
     echo "building ${package} in ${target}"
-    docker run -it -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}
+    docker run -it -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}:latest
     echo; echo; echo; echo;
   done
 done
