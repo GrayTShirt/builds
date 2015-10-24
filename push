@@ -39,6 +39,7 @@ echo "Continuing"
 for file in "$@"; do
   dist=$(detect_dist ${file})
   if [[ -n "${dist}" ]]; then
+    package_cloud yank bolo/bolo/${dist} ${file##*/}
     package_cloud push bolo/bolo/${dist} ${file}
   fi
 done
