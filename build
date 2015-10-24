@@ -51,18 +51,19 @@ if [[ ${#TARGETS[@]} == 0 ]]; then
   TARGETS=(debuild/{precise,trusty,vivid} rpmbuild/centos{5,6,7})
 fi
 
-if [[ -z "${BRANCH}" ]]; then
-  BRANCH=${BRANCHES[${package}]}
-fi
-
 for package in ${PACKAGES[@]}; do
+  USE_BRANCH=${BRANCH:-}
+  if [[ -z ${USE_BRANCH} ]]; then
+    USE_BRANCH=${BRANCHES[${package}]:-}
+  fi
+
   for target in ${TARGETS[@]}; do
-    if [[ -n ${BRANCH} ]]; then
-      echo "building ${package} (branch ${BRANCH}) in ${target}"
-      docker run -it -e BRANCH=${BRANCH} -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}:latest
+    if [[ -n ${USE_BRANCH} ]]; then
+      echo "building ${package} (branch ${USE_BRANCH}) in ${target}"
+      docker run -it -e BRANCH=${USE_BRANCH} -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}:latest
     else
       echo "building ${package} in ${target}"
-      docker run -it -e BRANCH=${BRANCH} -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}:latest
+      docker run -it -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}:latest
     fi
     echo; echo; echo; echo;
   done
