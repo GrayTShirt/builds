@@ -8,6 +8,11 @@ detect_dist() {
   esac
 }
 
+if [[ $# == 0 ]]; then
+  echo >&2 "USAGE: $0 /path/to/*.deb"
+  exit 1
+fi
+
 last=""
 for file in "$@"; do
   dist=$(detect_dist "${file}")
