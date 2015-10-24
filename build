@@ -5,6 +5,7 @@ declare -A VERSIONS
 VERSIONS[ctap]=2.0.0
 VERSIONS[libsodium]=1.0.3
 VERSIONS[libvigor]=1.2.8
+VERSIONS[libzmq]=4.1.3
 
 PACKAGES=()
 TARGETS=()

@@ -1,0 +1,3 @@
+usr/include/zmq.h
+usr/lib/libzmq.a
+usr/lib/libzmq.so
