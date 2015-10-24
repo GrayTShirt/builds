@@ -5,6 +5,9 @@ detect_dist() {
   (*/precise/*) echo "ubuntu/precise" ;;
   (*/trusty/*)  echo "ubuntu/trusty" ;;
   (*/vivid/*)   echo "ubuntu/vivid" ;;
+  (*/el5/*)     echo "el/5" ;;
+  (*/el6/*)     echo "el/6" ;;
+  (*/el7/*)     echo "el/7" ;;
   esac
 }
 
@@ -28,6 +31,7 @@ for file in "$@"; do
   fi
 done
 
+echo
 echo -n "Look good? (yes/no) "
 read confirm
 if [[ "${confirm}" != "yes" && "${confirm}" != "y" ]]; then
