@@ -1,0 +1,43 @@
+#!/bin/bash
+set -e
+
+BUILD=${BUILD:-1}
+BRANCH=${BRANCH:-master}
+if [[ -z "${DIST:-}" ]]; then
+  echo >&2 "\$DIST not specified; aborting package build"
+  exit 1
+fi
+if [[ -z "${VERSION:-}" ]]; then
+  echo >&2 "\$VERSION not specified; aborting package build"
+  exit 1
+fi
+
+curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
+sudo apt-get install -y ctap libsodium-dev libsodium13 libzmq-dev libzmq5
+
+cd ${HOME}
+git clone https://github.com/filefrog/libvigor
+cd libvigor
+git checkout ${BRANCH}
+./bootstrap
+./configure
+make dist
+
+mkdir -p ${HOME}/d/work
+cp libvigor-${VERSION}.tar.gz ${HOME}/d/libvigor_${VERSION}.orig.tar.gz
+cp -a debian/ ${HOME}/d/work/debian
+
+cd ${HOME}/d/work
+tar -xz --strip-components 1 -f ../libvigor_${VERSION}.orig.tar.gz
+cat <<EOF > debian/changelog
+libvigor (${VERSION}-${BUILD}) ${DIST}; urgency=low
+
+  * package
+
+ -- Docker Packager <packages@niftylogic.com>  $(date +"%a, %d %b %Y %H:%M:00 %z")
+EOF
+debuild -i -us -uc -S
+(cd .. && yes y | head -n1 | sudo mk-build-deps -ir libvigor_${VERSION}-${BUILD}.dsc)
+debuild -i -us -uc -b
+mkdir -p /srv/${DIST}
+cp -a ../*.deb /srv/${DIST}
