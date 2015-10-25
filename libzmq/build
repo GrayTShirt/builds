@@ -11,19 +11,23 @@ if [[ -z "${VERSION:-}" ]]; then
   exit 1
 fi
 
-curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
-sudo apt-get install libsodium-dev libsodium13 pkg-config
+mkdir -p /srv/${DIST}
+
 
 cd ${HOME}
 curl -sO http://download.zeromq.org/zeromq-${VERSION}.tar.gz
 
-mkdir -p ${HOME}/d/work
-cp zeromq-${VERSION}.tar.gz ${HOME}/d/zeromq_${VERSION}.orig.tar.gz
-cp -a /srv/debian/ ${HOME}/d/work/debian
+case "${FLAVOR}" in
+(debuild)
+  curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
+  sudo apt-get install libsodium-dev libsodium13 pkg-config
 
-cd ${HOME}/d/work
-tar -xz --strip-components 1 -f ../zeromq_${VERSION}.orig.tar.gz
-cat <<EOF > debian/changelog
+  cp zeromq-${VERSION}.tar.gz ${HOME}/zeromq_${VERSION}.orig.tar.gz
+  cp -a /srv/debian/ ${HOME}/debuild/debian
+
+  cd ${HOME}/debuild
+  tar -xz --strip-components 1 -f ../zeromq_${VERSION}.orig.tar.gz
+  cat <<EOF > debian/changelog
 zeromq (${VERSION}-${BUILD}) ${DIST}; urgency=low
 
   * package
@@ -31,6 +35,32 @@ zeromq (${VERSION}-${BUILD}) ${DIST}; urgency=low
  -- Docker Packager <packages@niftylogic.com>  $(date +"%a, %d %b %Y %H:%M:00 %z")
 EOF
 
-debuild -i -us -uc -b
-mkdir -p /srv/${DIST}
-cp -a ../*.deb /srv/${DIST}
+  debuild -i -us -uc -b
+  cp -a ../*.deb /srv/${DIST}
+  ;;
+
+(rpmbuild)
+  curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.rpm.sh | sudo bash
+
+  case "${DIST}" in
+  (el5|el6)
+    echo "${DIST} requires a newer version of autoconf than is provided upstream"
+    echo "Pulling down from packagecloud..."
+    sudo yum install -y autoconf-2.69 automake-1.15 libtool-2.4.6
+  ;;
+  esac
+
+  sudo yum install -y libsodium-devel libsodium pkgconfig
+  cp zeromq-${VERSION}.tar.gz ${HOME}/rpm
+  rpmbuild -bb /srv/rpm.spec
+  cp -a ${HOME}/rpm/x86_64/*.rpm /srv/${DIST}
+  ;;
+
+(*)
+  echo >&2 "UNHANDLED FLAVOR \`${FLAVOR}'!"
+  exit 2
+  ;;
+esac
+
+echo "SUCCESS"
+exit 0
