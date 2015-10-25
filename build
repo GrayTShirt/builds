@@ -51,8 +51,23 @@ while [[ $# != 0 ]]; do
 done
 
 if [[ ${#PACKAGES[@]} == 0 ]]; then
-  echo "building default packages"
-  PACKAGES=(ctap libsodium libvigor libzmq)
+  cat <<END
+
+You must specify what packages you want to build:
+
+  autotools     Update Autoconf / Automake for older platforms (el5/6)
+                Effectively a noop on platforms that don't need it
+
+  ctap          Test Anything Protocol for C
+
+  libsodium     Modern Crypto Library (used by libzmq)
+
+  libzmq        Distributed Messaging Library (used by libvigor)
+
+  libvigor      C - The Missing Bits
+
+END
+  exit 1
 fi
 if [[ ${#TARGETS[@]} == 0 ]]; then
   echo "using default targets"
