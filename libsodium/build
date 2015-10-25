@@ -11,20 +11,34 @@ if [[ -z "${VERSION:-}" ]]; then
   exit 1
 fi
 
+mkdir -p /srv/${DIST}
+
+cd ${HOME}
 git clone https://github.com/jedisct1/libsodium
 cd libsodium
 git checkout ${VERSION}
+mkdir -p build-aux
+
+case "${FLAVOR}/${DIST}" in
+(rpmbuild/el5|rpmbuild/el6)
+  echo "${DIST} requires a newer version of autoconf than is provided upstream"
+  echo "Pulling down from packagecloud..."
+  curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.rpm.sh | sudo bash
+  sudo yum install -y autoconf-2.69 automake-1.15 libtool-2.4.6
+  ;;
+esac
 ./autogen.sh
 ./configure
 make dist
 
-mkdir -p /tmp/d/work
-cp libsodium-${VERSION}.tar.gz /tmp/d/libsodium_${VERSION}.orig.tar.gz
-cp -a /srv/debian/ /tmp/d/work/debian
+case ${FLAVOR} in
+(debuild)
+  cp libsodium-${VERSION}.tar.gz ${HOME}/debuild/libsodium_${VERSION}.orig.tar.gz
+  cp -a /srv/debian/ ${HOME}/debuild/debian
 
-cd /tmp/d/work
-tar -xz --strip-components 1 -f ../libsodium_${VERSION}.orig.tar.gz
-cat <<EOF > debian/changelog
+  cd ${HOME}/debuild
+  tar -xz --strip-components 1 -f ../libsodium_${VERSION}.orig.tar.gz
+  cat <<EOF > debian/changelog
 libsodium (${VERSION}-${BUILD}) ${DIST}; urgency=low
 
   * package
@@ -32,6 +46,21 @@ libsodium (${VERSION}-${BUILD}) ${DIST}; urgency=low
  -- Docker Packager <packages@niftylogic.com>  $(date +"%a, %d %b %Y %H:%M:00 %z")
 EOF
 
-debuild -i -us -uc -b
-mkdir -p /srv/${DIST}
-cp -a ../*.deb /srv/${DIST}
+  debuild -i -us -uc -b
+  cp -a ../*.deb /srv/${DIST}
+  ;;
+
+(rpmbuild)
+  cp libsodium-${VERSION}.tar.gz ${HOME}/rpm
+  rpmbuild -bb /srv/rpm.spec
+  cp -a ${HOME}/rpm/x86_64/*.rpm /srv/${DIST}
+  ;;
+
+(*)
+  echo >&2 "UNHANDLED FLAVOR \`${FLAVOR}'!"
+  exit 2
+  ;;
+esac
+
+echo "SUCCESS"
+exit 0
