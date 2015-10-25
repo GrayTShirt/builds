@@ -20,7 +20,7 @@ curl -sO http://download.zeromq.org/zeromq-${VERSION}.tar.gz
 case "${FLAVOR}" in
 (debuild)
   curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
-  sudo apt-get install libsodium-dev libsodium13 pkg-config
+  sudo apt-get install libsodium-dev libsodium13
 
   cp zeromq-${VERSION}.tar.gz ${HOME}/zeromq_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian
@@ -50,7 +50,7 @@ EOF
   ;;
   esac
 
-  sudo yum install -y libsodium-devel libsodium pkgconfig
+  sudo yum install -y libsodium-devel libsodium
   cp zeromq-${VERSION}.tar.gz ${HOME}/rpm
   rpmbuild -bb /srv/rpm.spec
   cp -a ${HOME}/rpm/x86_64/*.rpm /srv/${DIST}

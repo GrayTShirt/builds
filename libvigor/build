@@ -17,7 +17,7 @@ mkdir -p /srv/${DIST}
 case "${FLAVOR}" in
 (debuild)
   curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
-  sudo apt-get install -y ctap libsodium-dev libsodium13 libzmq-dev libzmq5 pkg-config
+  sudo apt-get install -y ctap libsodium-dev libsodium13 libzmq-dev libzmq5
   ;;
 
 (rpmbuild)
@@ -30,7 +30,7 @@ case "${FLAVOR}" in
     ;;
   esac
 
-  sudo yum install -y ctap libsodium-devel libsodium libzmq-devel libzmq pkgconfig
+  sudo yum install -y ctap libsodium-devel libsodium libzmq-devel libzmq
   ;;
 
 (*)
