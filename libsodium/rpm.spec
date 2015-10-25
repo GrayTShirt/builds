@@ -1,6 +1,6 @@
 Name:           libsodium
 Version:        1.0.3
-Release:        1%{?dist}
+Release:        1%{?dist}.bolo1
 Summary:        Modern cryptography library
 
 Group:          System Environment/Libraries

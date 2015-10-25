@@ -1,6 +1,6 @@
 Name:           libzmq
 Version:        4.1.3
-Release:        1%{?dist}
+Release:        1%{?dist}.bolo1
 Summary:        Distributed Messaging
 
 Group:          System Environment/Libraries

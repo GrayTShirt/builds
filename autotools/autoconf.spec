@@ -1,6 +1,6 @@
 Name:           autoconf
 Version:        2.69
-Release:        1%{?dist}
+Release:        1%{?dist}.bolo1
 Summary:        A GNU tool for automatically configuring source code.
 
 Group:          System Environment/Libraries
