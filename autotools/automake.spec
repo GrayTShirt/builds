@@ -59,9 +59,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/automake*.1.gz
 
 
-
-%doc
-
 %changelog
-* Fri Oct 24 2015 James Hunt <james@niftylogiccom> 1.15-1
+* Sat Oct 24 2015 James Hunt <james@niftylogiccom> 1.15-1
 - Initial RPM package

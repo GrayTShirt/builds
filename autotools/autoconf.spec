@@ -73,5 +73,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/ifnames.1.gz
 
 %changelog
-* Fri Oct 24 2015 James Hunt <james@niftylogiccom> 2.69-1
+* Sat Oct 24 2015 James Hunt <james@niftylogiccom> 2.69-1
 - Initial RPM package
