@@ -15,16 +15,21 @@ case ${FLAVOR} in
 (rpmbuild)
   AUTOCONF_VERSION=2.69
   AUTOMAKE_VERSION=1.15
+  LIBTOOL_VERSION=2.4.6
 
   mkdir -p /srv/${DIST}
   cd ${HOME}/rpm
   curl -LO http://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VERSION}.tar.gz
   curl -LO http://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VERSION}.tar.gz
+  curl -LO http://ftp.gnu.org/gnu/libtool/libtool-${LIBTOOL_VERSION}.tar.gz
 
   rpmbuild -bb /srv/autoconf.spec
-  find ${HOME}/rpm/x86_64 -type f -name '*.rpm' | xargs sudo rpm -Uvh
+  find ${HOME}/rpm/x86_64 -type f -name 'autoconf*.rpm' | xargs sudo rpm -Uvh
 
   rpmbuild -bb /srv/automake.spec
+  find ${HOME}/rpm/x86_64 -type f -name 'automake*.rpm' | xargs sudo rpm -Uvh
+
+  rpmbuild -bb /srv/libtool.spec
 
   cp -a ${HOME}/rpm/x86_64/*.rpm /srv/${DIST}
   ;;
