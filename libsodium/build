@@ -33,7 +33,7 @@ make dist
 
 case ${FLAVOR} in
 (debuild)
-  cp libsodium-${VERSION}.tar.gz ${HOME}/debuild/libsodium_${VERSION}.orig.tar.gz
+  cp libsodium-${VERSION}.tar.gz ${HOME}/libsodium_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian
 
   cd ${HOME}/debuild
