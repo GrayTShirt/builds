@@ -38,14 +38,6 @@ case ${FLAVOR} in
 
   cd ${HOME}/debuild
   tar -xz --strip-components 1 -f ../libsodium_${VERSION}.orig.tar.gz
-  cat <<EOF > debian/changelog
-libsodium (${VERSION}-${BUILD}) ${DIST}; urgency=low
-
-  * package
-
- -- Docker Packager <packages@niftylogic.com>  $(date +"%a, %d %b %Y %H:%M:00 %z")
-EOF
-
   debuild -i -us -uc -b
   cp -a ../*.deb /srv/${DIST}
   ;;
