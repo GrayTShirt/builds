@@ -7,12 +7,16 @@ if [[ -z "${DIST:-}" ]]; then
   exit 1
 fi
 
-case ${FLAVOR} in
-(debuild)
+case "${FLAVOR}/${DIST}" in
+(debuild/*)
   echo "Debian / Ubuntu platforms don't need newer autotools"
   ;;
 
-(rpmbuild)
+(rpmbuild/el7)
+  echo "CentOS 7 doesn't need newer autotools"
+  ;;
+
+(rpmbuild/el5|rpmbuild/el6)
   AUTOCONF_VERSION=2.69
   AUTOMAKE_VERSION=1.15
   LIBTOOL_VERSION=2.4.6
