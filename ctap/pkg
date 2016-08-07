@@ -2,7 +2,6 @@
 set -e
 
 BUILD=${BUILD:-1}
-BRANCH=${BRANCH:-master}
 if [[ -z "${DIST:-}" ]]; then
   echo >&2 "\$DIST not specified; aborting package build"
   exit 1
@@ -15,27 +14,12 @@ fi
 mkdir -p /srv/${DIST}
 
 cd ${HOME}
-git clone https://github.com/filefrog/ctap
-cd ctap
-git checkout ${BRANCH}
-
-case "${FLAVOR}/${DIST}" in
-(rpmbuild/el5|rpmbuild/el6)
-  echo "${DIST} requires a newer version of autoconf than is provided upstream"
-  echo "Pulling down from packagecloud..."
-  curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.rpm.sh | sudo bash
-  sudo yum install -y autoconf-2.69 automake-1.15
-  ;;
-esac
-
-./bootstrap
-./configure
-make dist
+curl -LO https://github.com/jhunt/ctap/releases/download/v${VERSION}/ctap-${VERSION}.tar.gz
 
 case ${FLAVOR} in
 (debuild)
   cp ctap-${VERSION}.tar.gz ${HOME}/ctap_${VERSION}.orig.tar.gz
-  cp -a debian/ ${HOME}/debuild/debian
+  cp -a /srv/debian/ ${HOME}/debuild/debian
 
   cd ${HOME}/debuild
   tar -xz --strip-components 1 -f ../ctap_${VERSION}.orig.tar.gz
@@ -45,7 +29,7 @@ case ${FLAVOR} in
 
 (rpmbuild)
   cp ctap-${VERSION}.tar.gz ${HOME}/rpm
-  rpmbuild -bb rpm.spec
+  rpmbuild -bb /srv/rpm.spec
   cp -a ${HOME}/rpm/x86_64/*.rpm /srv/${DIST}
   ;;
 
