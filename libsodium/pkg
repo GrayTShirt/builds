@@ -14,22 +14,7 @@ fi
 mkdir -p /srv/${DIST}
 
 cd ${HOME}
-git clone https://github.com/jedisct1/libsodium
-cd libsodium
-git checkout ${VERSION}
-mkdir -p build-aux
-
-case "${FLAVOR}/${DIST}" in
-(rpmbuild/el5|rpmbuild/el6)
-  echo "${DIST} requires a newer version of autoconf than is provided upstream"
-  echo "Pulling down from packagecloud..."
-  curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.rpm.sh | sudo bash
-  sudo yum install -y autoconf-2.69 automake-1.15 libtool-2.4.6
-  ;;
-esac
-./autogen.sh
-./configure
-make dist
+curl -LO https://github.com/jedisct1/libsodium/releases/download/${VERSION}/libsodium-${VERSION}.tar.gz
 
 case ${FLAVOR} in
 (debuild)
