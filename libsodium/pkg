@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 NAME=libsodium
-VERSION=1.0.3
+VERSION=1.0.11
 ARCHIVE=${NAME}-${VERSION}.tar.gz
 SOURCE_URL=https://github.com/jedisct1/${NAME}/releases/download/${VERSION}/${ARCHIVE}
 
