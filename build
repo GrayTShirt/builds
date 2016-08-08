@@ -24,7 +24,13 @@ bail() {
 
 while [[ $# != 0 ]]; do
   case "${1}" in
-  (ctap|libsodium|libvigor|libzmq|autotools)
+  (all)
+    PACKAGES+=( ctap )
+    PACKAGES+=( libsodium )
+    PACKAGES+=( libzmq )
+    PACKAGES+=( libvigor )
+    ;;
+  (ctap|libsodium|libvigor|libzmq)
     PACKAGES+=( $1 )
     ;;
   (*/*)
@@ -54,9 +60,6 @@ if [[ ${#PACKAGES[@]} == 0 ]]; then
   cat <<END
 
 You must specify what packages you want to build:
-
-  autotools     Update Autoconf / Automake for older platforms (el5/6)
-                Effectively a noop on platforms that don't need it
 
   ctap          Test Anything Protocol for C
 
