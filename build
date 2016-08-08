@@ -1,15 +1,6 @@
 #!/bin/bash
 
 BASE=$(cd $(dirname ${BASH_SOURCE[0]}); pwd)
-declare -A VERSIONS
-VERSIONS[ctap]=2.0.0
-VERSIONS[libsodium]=1.0.3
-VERSIONS[libvigor]=1.2.8
-VERSIONS[libzmq]=4.1.3
-
-declare -A BRANCHES
-BRANCHES[ctap]=master
-BRANCHES[libvigor]=master
 
 PACKAGES=()
 TARGETS=()
@@ -78,21 +69,14 @@ if [[ ${#TARGETS[@]} == 0 ]]; then
 fi
 
 for package in ${PACKAGES[@]}; do
-  USE_BRANCH=${BRANCH:-}
-  if [[ -z ${USE_BRANCH} ]]; then
-    USE_BRANCH=${BRANCHES[${package}]:-}
-  fi
-
   for target in ${TARGETS[@]}; do
-    if [[ -n ${USE_BRANCH} ]]; then
-      echo "building ${package} (branch ${USE_BRANCH}) in ${target}"
-      docker run -it -e BRANCH=${USE_BRANCH} -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}:latest || \
-        bail "unable to build ${BASE}/${package} (branch ${USE_BRANCH}) in ${target}"
-    else
-      echo "building ${package} in ${target}"
-      docker run -it -e VERSION=${VERSIONS[${package}]} -v ${BASE}/${package}:/srv ${target}:latest || \
+    echo "building ${package} in ${target}"
+    docker run -it \
+      -v ${BASE}/${package}:/srv \
+      -v ${BASE}/pub:/pub \
+      ${target}:latest \
+      || \
         bail "unable to build ${BASE}/${package} in ${target}"
-    fi
     echo; echo; echo; echo;
   done
 done
