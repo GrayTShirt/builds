@@ -1,2 +1,4 @@
 *.deb
+*.dsc
 *.rpm
+*.tar.gz
