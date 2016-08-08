@@ -1,36 +1,39 @@
 #!/bin/bash
-set -e
+set -eu
+NAME=ctap
+VERSION=2.0.0
+ARCHIVE=${NAME}-${VERSION}.tar.gz
+SOURCE_URL=https://github.com/jhunt/${NAME}/releases/download/v${VERSION}/${ARCHIVE}
 
-BUILD=${BUILD:-1}
-if [[ -z "${DIST:-}" ]]; then
-  echo >&2 "\$DIST not specified; aborting package build"
-  exit 1
-fi
-if [[ -z "${VERSION:-}" ]]; then
-  echo >&2 "\$VERSION not specified; aborting package build"
-  exit 1
-fi
-
-mkdir -p /srv/${DIST}
+for var in FLAVOR DIST; do
+	val=$(eval echo \$$var)
+	if [[ -z $val ]]; then
+		echo >&2 "\$$var not defined in environment (are you in the rpmbuild/debuid Docker container?)"
+		exit 1
+	fi
+done
 
 cd ${HOME}
-curl -LO https://github.com/jhunt/ctap/releases/download/v${VERSION}/ctap-${VERSION}.tar.gz
+curl -LO ${SOURCE_URL}
 
+sudo mkdir -p /pub/${OS}/${DIST}/
 case ${FLAVOR} in
 (debuild)
-  cp ctap-${VERSION}.tar.gz ${HOME}/ctap_${VERSION}.orig.tar.gz
+  cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian
 
   cd ${HOME}/debuild
-  tar -xz --strip-components 1 -f ../ctap_${VERSION}.orig.tar.gz
+  tar -xz --strip-components 1 -f ../${NAME}_${VERSION}.orig.tar.gz
   debuild -i -us -uc -b
-  cp -a ../*.deb /srv/${DIST}
+  find .. -name '*.deb' -o -name '*.dsc' -o -name '*.tar.gz' |\
+    xargs -I@ sudo cp @ /pub/${OS}/${DIST}
   ;;
 
 (rpmbuild)
-  cp ctap-${VERSION}.tar.gz ${HOME}/rpm
-  rpmbuild -bb /srv/rpm.spec
-  cp -a ${HOME}/rpm/x86_64/*.rpm /srv/${DIST}
+  cp ${ARCHIVE} ${HOME}/rpm
+  rpmbuild -ba /srv/rpm.spec
+  find .. -name '*.rpm' |\
+    xargs -I@ sudo cp @ /pub/${OS}/${DIST}
   ;;
 
 (*)
