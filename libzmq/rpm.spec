@@ -1,5 +1,5 @@
 Name:           libzmq
-Version:        4.1.3
+Version:        4.1.5
 Release:        1%{?dist}.bolo1
 Summary:        Distributed Messaging
 
@@ -14,6 +14,8 @@ BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  libsodium-devel
+BuildRequires:  asciidoc
+BuildRequires:  xmlto
 
 Requires: libsodium
 
@@ -81,5 +83,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sat Oct 24 2015 James Hunt <james@niftylogiccom> 4.1.3-1
+* Sun Aug  7 2016 James Hunt <james@niftylogic.com> 4.1.5-1
+- Upstream release
+
+* Sat Oct 24 2015 James Hunt <james@niftylogic.com> 4.1.3-1
 - Initial RPM package
