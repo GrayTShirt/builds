@@ -1,0 +1,47 @@
+Source: libhiredis
+Standards-Version: 3.9.3
+Maintainer: James Hunt <james@jameshunt.us>
+Section: libs
+Priority: optional
+Homepage: http://github.com/redis/hiredis
+Build-Depends: debhelper (>= 8.0.0)
+
+Package: libhiredis13
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Minimalistic C client library for the Redis database
+ libhiredis provides minimal support for the Redis protocol, but wraps in a
+ high level, printf-like API.  It supports sending commands and receiving
+ replies (both syncrhonously and asynchronously), but also features a reply
+ parser that is decoupled from the I/O layer, to aide reusability.  Only the
+ binary-sfae Redis protocol is supported, which requires Redis 1.2.0 or
+ greater.
+
+Package: libhiredis-dev
+Architecture: any
+Section: libdevel
+Depends: libsodium-dev, libzmq-dev, ${misc:Depends}, ${shlibs:Depends}
+Description: Minimalistic C client library for the Redis database - development tools
+ libhiredis provides minimal support for the Redis protocol, but wraps in a
+ high level, printf-like API.  It supports sending commands and receiving
+ replies (both syncrhonously and asynchronously), but also features a reply
+ parser that is decoupled from the I/O layer, to aide reusability.  Only the
+ binary-sfae Redis protocol is supported, which requires Redis 1.2.0 or
+ greater.
+ .
+ This package contains the header files for developing code against libhiredis.
+
+Package: libhiredis13-dbg
+Architecture: any
+Priority: extra
+Section: debug
+Depends: libhiredis13 (= ${binary:Version}), ${misc:Depends}
+Description: Minimalistic C client library for the Redis database
+ libhiredis provides minimal support for the Redis protocol, but wraps in a
+ high level, printf-like API.  It supports sending commands and receiving
+ replies (both syncrhonously and asynchronously), but also features a reply
+ parser that is decoupled from the I/O layer, to aide reusability.  Only the
+ binary-sfae Redis protocol is supported, which requires Redis 1.2.0 or
+ greater.
+ .
+ This package contains debugging symbols for libhiredis.

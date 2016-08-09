@@ -1,0 +1,5 @@
+libhiredis (0.13.3-1) unstable; urgency=low
+
+  * Initial Debian Package
+
+ -- James Hunt <james@niftylogic.com>  Mon,  8 Aug 2016 13:14:00 +0000

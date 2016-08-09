@@ -1,0 +1,3 @@
+usr/include/hiredis
+usr/lib/libhiredis.a
+usr/lib/libhiredis.so

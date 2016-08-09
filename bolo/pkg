@@ -1,0 +1,64 @@
+#!/bin/bash
+set -eu
+NAME=bolo
+VERSION=0.2.18
+ARCHIVE=${NAME}-${VERSION}.tar.gz
+SOURCE_URL=https://github.com/bolo/${NAME}/releases/download/v${VERSION}/${ARCHIVE}
+
+for var in FLAVOR DIST; do
+	val=$(eval echo \$$var)
+	if [[ -z $val ]]; then
+		echo >&2 "\$$var not defined in environment (are you in the rpmbuild/debuid Docker container?)"
+		exit 1
+	fi
+done
+
+cd ${HOME}
+curl -LO ${SOURCE_URL}
+
+sudo mkdir -p /pub/${OS}/${DIST}/
+case ${FLAVOR} in
+(debuild)
+  echo "DEBIAN not supported yet - no APT repo!"
+  exit 1
+  curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
+  sudo apt-get install -y ctap libsodium-dev libsodium13 libzmq-dev libzmq5 libhiredis-dev
+
+  cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
+  cp -a /srv/debian/ ${HOME}/debuild/debian
+
+  cd ${HOME}/debuild
+  tar -xz --strip-components 1 -f ../${NAME}_${VERSION}.orig.tar.gz
+  debuild -i -us -uc -b
+  find .. -name '*.deb' -o -name '*.dsc' -o -name '*.tar.gz' |\
+    xargs -I@ sudo cp @ /pub/${OS}/${DIST}
+  ;;
+
+(rpmbuild)
+  sudo curl -L -o /etc/yum.repos.d/niftylogic.repo \
+    http://pkg.niftylogic.com/centos/niftylogic.repo
+  sudo yum install -y \
+    ctap \
+    libsodium-devel libsodium \
+    libzmq-devel libzmq \
+    libvigor libvigor-devel \
+    pcre-devel \
+    rrdtool-devel \
+    postgresql-devel \
+    libhiredis-devel \
+    ncurses-devel
+
+  cp ${ARCHIVE} ${HOME}/rpm
+  rpmbuild -ba /srv/rpm.spec
+  find .. -name '*.rpm' |\
+    xargs -I@ sudo cp @ /pub/${OS}/${DIST}
+  ;;
+
+(*)
+  echo >&2 "UNHANDLED FLAVOR \`${FLAVOR}'!"
+  exit 2
+  ;;
+esac
+
+echo "SUCCESS"
+exit 0

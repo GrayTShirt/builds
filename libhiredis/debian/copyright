@@ -1,0 +1,26 @@
+Format: http://dep.debian.net/deps/dep5
+Upstream-Name: libhiredis
+Source: <http://github.com/redis/hiredis>
+
+Files: *
+Copyright: 2009-2011, Salvatore Sanfilippo <antirez at gmail dot com>
+ 2010-2011, Pieter Noordhuis <pcnoordhuis at gmail dot com>
+License: GPL-3
+ libvigor is published under the GNU Public License v3 without any
+ warranty implied or otherwise, with no suitability for any purpose.
+ Use this software at your own risk.
+ .
+ On Debian systems, the complete text of the GNU General Public
+ License, version 3, can be found in
+ /usr/share/common-licenses/GPL-3.
+
+Files: debian/*
+Copyright: 2016 James Hunt <james@jameshunt.us>
+License: GPL-3
+ libvigor is published under the GNU Public License v3 without any
+ warranty implied or otherwise, with no suitability for any purpose.
+ Use this software at your own risk.
+ .
+ On Debian systems, the complete text of the GNU General Public
+ License, version 3, can be found in
+ /usr/share/common-licenses/GPL-3.

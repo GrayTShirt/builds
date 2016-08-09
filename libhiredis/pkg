@@ -1,0 +1,47 @@
+#!/bin/bash
+set -eu
+NAME=libhiredis
+VERSION=0.13.3
+ARCHIVE=hiredis-${VERSION}.tar.gz
+SOURCE_URL=https://github.com/redis/hiredis/archive/v${VERSION}.tar.gz
+
+for var in FLAVOR DIST; do
+	val=$(eval echo \$$var)
+	if [[ -z $val ]]; then
+		echo >&2 "\$$var not defined in environment (are you in the rpmbuild/debuid Docker container?)"
+		exit 1
+	fi
+done
+
+cd ${HOME}
+curl -L ${SOURCE_URL} -o ${ARCHIVE}
+ls -l
+
+sudo mkdir -p /pub/${OS}/${DIST}/
+case ${FLAVOR} in
+(debuild)
+  cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
+  cp -a /srv/debian/ ${HOME}/debuild/debian
+
+  cd ${HOME}/debuild
+  tar -xz --strip-components 1 -f ../${NAME}_${VERSION}.orig.tar.gz
+  debuild -i -us -uc -b
+  find .. -name '*.deb' -o -name '*.dsc' -o -name '*.tar.gz' |\
+    xargs -I@ sudo cp @ /pub/${OS}/${DIST}
+  ;;
+
+(rpmbuild)
+  cp ${ARCHIVE} ${HOME}/rpm
+  rpmbuild -ba /srv/rpm.spec
+  find .. -name '*.rpm' |\
+    xargs -I@ sudo cp @ /pub/${OS}/${DIST}
+  ;;
+
+(*)
+  echo >&2 "UNHANDLED FLAVOR \`${FLAVOR}'!"
+  exit 2
+  ;;
+esac
+
+echo "SUCCESS"
+exit 0

@@ -17,11 +17,14 @@ while [[ $# != 0 ]]; do
   case "${1}" in
   (all)
     PACKAGES+=( ctap )
+    PACKAGES+=( libhiredis )
     PACKAGES+=( libsodium )
     PACKAGES+=( libzmq )
     PACKAGES+=( libvigor )
+    PACKAGES+=( rrdtool )
+    PACKAGES+=( bolo )
     ;;
-  (ctap|libsodium|libvigor|libzmq)
+  (ctap|libhiredis|libsodium|libvigor|libzmq|rrdtool|bolo)
     PACKAGES+=( $1 )
     ;;
   (*/*)
@@ -59,6 +62,8 @@ You must specify what packages you want to build:
   libzmq        Distributed Messaging Library (used by libvigor)
 
   libvigor      C - The Missing Bits
+
+  bolo          A Monitoring System Toolkit
 
 END
   exit 1
