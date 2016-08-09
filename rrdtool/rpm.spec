@@ -11,7 +11,11 @@ URL:            http://oss.oetiker.ch/rrdtool/
 Source0:        http://oss.oetiker.ch/rrdtool/pub/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if 0%{?el6} || 0%{?el7}
+Requires:       dejavu-lgc-sans-mono-fonts
+%else
 Requires:       dejavu-lgc-fonts
+%endif
 
 BuildRequires:  gcc-c++, openssl-devel, freetype-devel
 BuildRequires:  libpng-devel, zlib-devel, intltool >= 0.35.0
