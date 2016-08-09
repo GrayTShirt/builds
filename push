@@ -1,50 +1,9 @@
 #!/bin/bash
 
-detect_dist() {
-  case "${1}" in
-  (*/precise/*) echo "ubuntu/precise" ;;
-  (*/trusty/*)  echo "ubuntu/trusty" ;;
-  (*/vivid/*)   echo "ubuntu/vivid" ;;
-  (*/el5/*)     echo "el/5" ;;
-  (*/el6/*)     echo "el/6" ;;
-  (*/el7/*)     echo "el/7" ;;
-  esac
-}
-
-if [[ $# == 0 ]]; then
-  echo >&2 "USAGE: $0 /path/to/*.deb"
-  exit 1
+DEST=$1
+if [[ -z $DEST ]]; then
+	echo "USAGE: $0 user@host:/incoming"
+	exit 1
 fi
 
-last=""
-for file in "$@"; do
-  dist=$(detect_dist "${file}")
-
-  if [[ -n "${dist}" ]]; then
-    if [[ -n "${last}" && "${last}" != "${dist}" ]]; then
-      echo
-    fi
-    printf "%-14s %s\n" "${dist}" "${file}"
-    last=${dist}
-  else
-    echo >&2 "unrecognized os/dist for \`${file}'; skipping"
-  fi
-done
-
-echo
-echo -n "Look good? (yes/no) "
-read confirm
-if [[ "${confirm}" != "yes" && "${confirm}" != "y" ]]; then
-  echo >&2 "Bailing out"
-  exit 1
-fi
-
-echo "Continuing"
-for file in "$@"; do
-  dist=$(detect_dist ${file})
-  if [[ -n "${dist}" ]]; then
-    package_cloud yank bolo/bolo/${dist} ${file##*/}
-    package_cloud push bolo/bolo/${dist} ${file}
-  fi
-done
-exit 0
+exec rsync -avz pub/ ${DEST} --exclude '*.tar.gz'
