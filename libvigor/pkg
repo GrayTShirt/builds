@@ -19,10 +19,10 @@ curl -LO ${SOURCE_URL}
 sudo mkdir -p /pub/${OS}/${DIST}/
 case ${FLAVOR} in
 (debuild)
-  echo "DEBIAN not supported yet - no APT repo!"
-  exit 1
-  curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
-  sudo apt-get install -y ctap libsodium-dev libsodium13 libzmq-dev libzmq5
+  sudo curl -L -o /etc/apt/sources.list.d/niftylogic.list \
+    http://pkg.niftylogic.com/${OS}/${DIST}/niftylogic.list
+  sudo apt-get update
+  sudo apt-get install -y --force-yes ctap libsodium-dev libsodium13 libzmq-dev libzmq5
 
   cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian
