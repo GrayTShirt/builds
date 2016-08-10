@@ -6,7 +6,7 @@ Priority: optional
 Homepage: http://github.com/redis/hiredis
 Build-Depends: debhelper (>= 8.0.0)
 
-Package: libhiredis13
+Package: libhiredis0.13
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Minimalistic C client library for the Redis database
@@ -20,7 +20,7 @@ Description: Minimalistic C client library for the Redis database
 Package: libhiredis-dev
 Architecture: any
 Section: libdevel
-Depends: libsodium-dev, libzmq-dev, ${misc:Depends}, ${shlibs:Depends}
+Depends: libhiredis0.13 (= ${binary:Version}), ${misc:Depends}, ${shlibs:Depends}
 Description: Minimalistic C client library for the Redis database - development tools
  libhiredis provides minimal support for the Redis protocol, but wraps in a
  high level, printf-like API.  It supports sending commands and receiving
@@ -31,11 +31,11 @@ Description: Minimalistic C client library for the Redis database - development 
  .
  This package contains the header files for developing code against libhiredis.
 
-Package: libhiredis13-dbg
+Package: libhiredis0.13-dbg
 Architecture: any
 Priority: extra
 Section: debug
-Depends: libhiredis13 (= ${binary:Version}), ${misc:Depends}
+Depends: libhiredis0.13 (= ${binary:Version}), ${misc:Depends}
 Description: Minimalistic C client library for the Redis database
  libhiredis provides minimal support for the Redis protocol, but wraps in a
  high level, printf-like API.  It supports sending commands and receiving
