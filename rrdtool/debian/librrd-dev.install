@@ -1,0 +1,4 @@
+usr/include
+usr/lib/librrd.a
+usr/lib/librrd.so
+usr/lib/pkgconfig/librrd.pc

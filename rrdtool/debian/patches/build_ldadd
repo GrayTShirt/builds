@@ -1,0 +1,13 @@
+Index: pkg-rrdtool/src/Makefile.am
+===================================================================
+--- pkg-rrdtool.orig/src/Makefile.am	2014-04-26 00:39:30.566538157 +0200
++++ pkg-rrdtool/src/Makefile.am	2014-04-26 00:40:52.842539392 +0200
+@@ -116,7 +116,7 @@
+ rrdcached_SOURCES = rrd_daemon.c
+ rrdcached_DEPENDENCIES = librrd_th.la
+ rrdcached_CPPFLAGS = -DVERSION='"$(VERSION)"' -DLOCALSTATEDIR='"$(localstatedir)"'
+-rrdcached_LDADD = librrd_th.la
++rrdcached_LDADD = librrd_th.la $(ALL_LIBS)
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = librrd.pc

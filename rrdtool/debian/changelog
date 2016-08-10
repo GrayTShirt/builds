@@ -1,0 +1,5 @@
+rrdtool (1.6.0-1) unstable; urgency=low
+
+  * Inital packaging
+
+ -- James Hunt <james@niftylogic.com>  Tue,  9 Aug 2016 23:28:00 +0400

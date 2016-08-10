@@ -43,15 +43,6 @@ RRD is the Acronym for Round Robin Database. RRD is a system to store and
 display time-series data (i.e. network bandwidth, machine-room temperature,
 server load average). This package allow you to use directly this library.
 
-#%package doc
-#Summary:        RRDtool documentation
-#Group:          Documentation
-#
-#%description doc
-#RRD is the Acronym for Round Robin Database. RRD is a system to store and
-#display time-series data (i.e. network bandwidth, machine-room temperature,
-#server load average). This package contains documentation on using RRD.
-
 %package perl
 Summary:        Perl RRDtool bindings
 Group:          Development/Languages
@@ -190,11 +181,6 @@ test "$1" != 0 || /usr/sbin/userdel %rrdcached_user &>/dev/null || :
 %exclude %{_libdir}/*.la
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/librrd.pc
-
-#%files doc
-#%defattr(-,root,root,-)
-#%doc CONTRIBUTORS COPYING COPYRIGHT README TODO NEWS THREADS
-#%doc examples doc2/html doc2/txt
 
 %files perl
 %defattr(-,root,root,-)
