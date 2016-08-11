@@ -56,6 +56,10 @@ install -m 0755 -D redhat/init.d/bolo2pg    $RPM_BUILD_ROOT%{_initrddir}/bolo2pg
 install -m 0755 -D redhat/init.d/bolo2meta  $RPM_BUILD_ROOT%{_initrddir}/bolo2meta
 ln -s %{_bindir}/bolo $RPM_BUILD_ROOT%{_sbindir}/bolo
 
+# don't need the libtool archives
+rm -f $RPM_BUILD_ROOT%{_libdir}/libbolo.la
+rm -f $RPM_BUILD_ROOT%{_libdir}/libtsdp.la
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -96,35 +100,35 @@ fi
 
 #######################################################################
 
-%package clients
-Summary:        Monitoring System Clients
+%package -n dbolo
+Summary:        Monitoring System Agent
 Group:          Applications/System
 
-%description clients
+%description -n dbolo
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
-This package provides client programs for bolo.
+This package provides the dbolo monitoring agent for bolo.
 
 
-%post clients
+%post -n dbolo
 /sbin/chkconfig --add dbolo
 
 
-%preun clients
+%preun -n dbolo
 if [ $1 == 0 ]; then # erase!
 	/sbin/service stop dbolo
 	/sbin/chkconfig --del dbolo
 fi
 
 
-%postun clients
+%postun -n dbolo
 if [ $1 == 0 ]; then # upgrade!
 	/sbin/service condrestart dbolo
 fi
 
 
-%files clients
+%files -n dbolo
 %defattr(-,root,root,-)
 %{_sbindir}/dbolo
 %{_initrddir}/dbolo
@@ -133,36 +137,36 @@ fi
 
 
 #######################################################################
-%package redis
+%package redis-subscriber
 
 Summary:        Monitoring System Redis Subscriber
 Group:          Applications/System
 
-%description redis
+%description redis-subscriber
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
 This package provides the redis subscriber component for bolo.
 
 
-%post redis
+%post redis-subscriber
 /sbin/chkconfig --add bolo2redis
 
 
-%preun redis
+%preun redis-subscriber
 if [ $1 == 0 ]; then # erase!
 	/sbin/service stop bolo2redis
 	/sbin/chkconfig --del bolo2redis
 fi
 
 
-%postun redis
+%postun redis-subscriber
 if [ $1 == 0 ]; then # upgrade!
 	/sbin/service condrestart bolo2redis
 fi
 
 
-%files redis
+%files redis-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2redis
 %{_initrddir}/bolo2redis
@@ -170,35 +174,35 @@ fi
 
 
 #######################################################################
-%package rrd
+%package rrd-subscriber
 Summary:        Monitoring System RRD Subscriber
 Group:          Applications/System
 
-%description rrd
+%description rrd-subscriber
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
 This package provides the RRD subscriber component for bolo.
 
 
-%post rrd
+%post rrd-subscriber
 /sbin/chkconfig --add bolo2rrd
 
 
-%preun rrd
+%preun rrd-subscriber
 if [ $1 == 0 ]; then # erase!
 	/sbin/service stop bolo2rrd
 	/sbin/chkconfig --del bolo2rrd
 fi
 
 
-%postun rrd
+%postun rrd-subscriber
 if [ $1 == 0 ]; then # upgrade!
 	/sbin/service condrestart bolo2rrd
 fi
 
 
-%files rrd
+%files rrd-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2rrd
 %{_initrddir}/bolo2rrd
@@ -206,35 +210,35 @@ fi
 
 
 #######################################################################
-%package pg
+%package pg-subscriber
 Summary:        Monitoring System Postgres Subscriber
 Group:          Applications/System
 
-%description pg
+%description pg-subscriber
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
 This package provides the postgres subscriber component for bolo.
 
 
-%post pg
+%post pg-subscriber
 /sbin/chkconfig --add bolo2pg
 
 
-%preun pg
+%preun pg-subscriber
 if [ $1 == 0 ]; then # erase!
 	/sbin/service stop bolo2pg
 	/sbin/chkconfig --del bolo2pg
 fi
 
 
-%postun pg
+%postun pg-subscriber
 if [ $1 == 0 ]; then # upgrade!
 	/sbin/service condrestart bolo2pg
 fi
 
 
-%files pg
+%files pg-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2pg
 %{_initrddir}/bolo2pg
@@ -243,35 +247,35 @@ fi
 
 
 #######################################################################
-%package meta
+%package meta-subscriber
 Summary:        Monitoring System Meta Subscriber
 Group:          Applications/System
 
-%description meta
+%description meta-subscriber
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
 This package provides the meta subscriber component for bolo.
 
 
-%post meta
+%post meta-subscriber
 /sbin/chkconfig --add bolo2meta
 
 
-%preun meta
+%preun meta-subscriber
 if [ $1 == 0 ]; then # erase!
 	/sbin/service stop bolo2meta
 	/sbin/chkconfig --del bolo2meta
 fi
 
 
-%postun meta
+%postun meta-subscriber
 if [ $1 == 0 ]; then # upgrade!
 	/sbin/service condrestart bolo2meta
 fi
 
 
-%files meta
+%files meta-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2meta
 %{_initrddir}/bolo2meta
@@ -298,11 +302,11 @@ This package provides utility components for bolo.
 
 
 #######################################################################
-%package libs
+%package -n libbolo1
 Summary:        Monitoring System Libraries
 Group:          System Environment/Libraries
 
-%description libs
+%description -n libbolo1
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
@@ -310,18 +314,39 @@ This package provides libraries that are linked to in user
 subscribers.
 
 
-%files libs
+%files -n libbolo1
 %defattr(-,root,root,-)
 %{_libdir}/libbolo.so.*
 %{_libdir}/libtsdp.so.*
 
 
 #######################################################################
-%package libs-devel
+%package -n libtsdp1
+Summary:        Monitoring System Libraries
+Group:          System Environment/Libraries
+
+%description -n libtsdp1
+bolo is a lightweight and scalable monitoring system that can
+track samples, counters, states and configuration data.
+
+This package provides libraries that are linked to in user
+subscribers.
+
+
+%files -n libtsdp1
+%defattr(-,root,root,-)
+%{_libdir}/libbolo.so.*
+%{_libdir}/libtsdp.so.*
+
+
+#######################################################################
+%package devel
 Summary:        Monitoring System Developer Libraries
 Group:          Development/Libraries
+Requires:       libbolo1
+Requires:       libtsdp1
 
-%description libs-devel
+%description devel
 bolo is a lightweight and scalable monitoring system that can
 track samples, counters, states and configuration data.
 
@@ -329,15 +354,13 @@ This package provides developer libraries and headers used to
 write user subscribers.
 
 
-%files libs-devel
+%files devel
 %defattr(-,root,root,-)
 %{_includedir}/bolo.h
 %{_includedir}/tsdp.h
 %{_libdir}/libbolo.a
-%{_libdir}/libbolo.la
 %{_libdir}/libbolo.so
 %{_libdir}/libtsdp.a
-%{_libdir}/libtsdp.la
 %{_libdir}/libtsdp.so
 
 
@@ -345,6 +368,9 @@ write user subscribers.
 %changelog
 * Mon Aug  8 2016 James Hunt <james@niftylogic.com> 0.2.18-1
 - Upstream release
+- Rename dbolo and subscriber packages
+- Split out libraries from bolo-libs into libbolo1 and libtsdp1
+- Remove libtool archive files (*.la) from devel packages
 
 * Mon Aug  8 2016 James Hunt <james@niftylogic.com> 0.2.17-1
 - Upstream release
