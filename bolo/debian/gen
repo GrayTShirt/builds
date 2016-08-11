@@ -1,0 +1,7 @@
+#!/bin/bash
+
+rm *.lintian-overrides
+for pkg in $(awk '/^Package:/ { print $2}' control); do
+  echo "setting overrides for ${pkg}..."
+  echo "${pkg}: new-package-should-close-itp-bug" > $pkg.lintian-overrides
+done

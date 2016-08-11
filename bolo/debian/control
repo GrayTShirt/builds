@@ -1,0 +1,213 @@
+Source: bolo
+Section: admin
+Priority: optional
+Maintainer: James Hunt <james@jameshunt.us>
+Homepage: https://github.com/jhunt/bolo
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8),
+               ctap,
+               libpcre3,
+               libhiredis0.13,
+               libhiredis-dev,
+               libpcre3-dev,
+               libpq-dev,
+               libpq5,
+               librrd-dev,
+               librrd8,
+               libvigor-dev,
+               libvigor1,
+               libzmq-dev
+
+Package: libbolo1
+Architecture: any
+Depends: libsodium13, libzmq5, ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System Server
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the libraries common to clients and servers.
+
+Package: libbolo1-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: libbolo1 (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Server
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for bolo core libraries.
+
+Package: libbolo-dev
+Architecture: any
+Section: libdevel
+Depends: libsodium-dev,
+         libzmq-dev,
+         libbolo1 (= ${binary:Version}),
+         ${misc:Depends},
+         ${shlib:Depends}
+Description: Monitoring System Server
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides header files for developing bolo clients
+ and subscribers.
+
+Package: libtsdp1
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System Server
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the libraries common to clients and servers.
+
+Package: libtsdp1-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: libtsdp1 (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Server
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for bolo TSDP library.
+
+Package: libtsdp-dev
+Architecture: any
+Section: libdevel
+Depends: libsodium-dev,
+         libzmq-dev,
+         libtsdp1 (= ${binary:Version}),
+         ${misc:Depends},
+         ${shlib:Depends}
+Description: Monitoring System
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides header files for developing bolo clients
+ and subscribers using the TSDP library.
+
+Package: bolo
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System Server
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the server implementation.
+
+Package: bolo-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Server
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for bolo.
+
+Package: dbolo
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System Agent
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the dbolo client for bolo.
+
+Package: dbolo-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: dbolo (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Agent
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for dbolo.
+
+Package: bolo-pg-subscriber
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System PostgreSQL Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the PostgreSQL subscriber for bolo.
+
+Package: bolo-pg-subscriber-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Debugging Symbols for Monitoring System PostgreSQL Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the PostgreSQL
+ subscriber for bolo.
+
+Package: bolo-rrd-subscriber
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System RRD Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the RRD subscriber for bolo.
+
+Package: bolo-rrd-subscriber-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-rrd-subscriber (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System RRD Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the RRD subscriber for
+ bolo.
+
+Package: bolo-console-subscriber
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System RRD Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the RRD subscriber for bolo.
+
+Package: bolo-console-subscriber-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-console-subscriber (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Console Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the Console subscriber for
+ bolo.
+
+Package: bolo-redis-subscriber
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System Redis Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the Redis subscriber for bolo.
+
+Package: bolo-redis-subscriber-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-redis-subscriber (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Redis Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the Redis subscriber for
+ bolo.

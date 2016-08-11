@@ -1,0 +1,3 @@
+/usr/sbin/bolo2pg
+/usr/share/man/man8/bolo2pg.8
+examples/schema usr/share/bolo

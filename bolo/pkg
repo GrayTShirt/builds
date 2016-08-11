@@ -19,10 +19,23 @@ curl -LO ${SOURCE_URL}
 sudo mkdir -p /pub/${OS}/${DIST}/
 case ${FLAVOR} in
 (debuild)
-  echo "DEBIAN not supported yet - no APT repo!"
-  exit 1
-  curl -s https://packagecloud.io/install/repositories/bolo/bolo/script.deb.sh | sudo bash
-  sudo apt-get install -y ctap libsodium-dev libsodium13 libzmq-dev libzmq5 libhiredis-dev
+  sudo curl -L -o /etc/apt/sources.list.d/niftylogic.list \
+    http://pkg.niftylogic.com/${OS}/${DIST}/niftylogic.list
+  sudo apt-get update
+  sudo apt-get install -y --force-yes \
+    ctap \
+    libsodium-dev libsodium13 \
+    libzmq-dev libzmq5 \
+    libhiredis-dev libhiredis0.13 \
+    libncurses5-dev libncursesw5 \
+    librrd-dev librrd8 \
+    libpq-dev libpq5 \
+    libvigor-dev libvigor1
+  # ugly hack
+  sudo mkdir /usr/include/ncursesw
+  sudo cp -a /usr/include/*curses.h /usr/include/ncursesw/
+  # another ugly hack
+  sudo cp -a /usr/lib/x86_64-linux-gnu/libncurses.so /usr/lib/x86_64-linux-gnu/libncursesw.so
 
   cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian

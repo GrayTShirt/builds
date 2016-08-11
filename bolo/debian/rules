@@ -1,0 +1,38 @@
+#!/usr/bin/make -f
+
+export CFLAGS=-Wall -g
+export CPPFLAGS=-I/usr/include -I/usr/include/hiredis -I/usr/include/postgresql
+
+.PHONY: override_dh_auto_configure \
+        override_dh_auto_test \
+        override_dh_installinit \
+        override_dh_strip
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+	  --with-rrd-subscriber \
+	  --with-pg-subscriber \
+	  --with-console-subscriber \
+	  --with-redis-subscriber \
+	  --without-sqlite-subscriber
+
+override_dh_auto_test:
+	# noop
+
+override_dh_installinit:
+	dh_installinit --name bolo
+	dh_installinit --name bolo2pg
+	dh_installinit --name bolo2rrd
+
+override_dh_strip:
+	dh_strip -plibbolo1                --dbg-package=libbolo1-dbg
+	dh_strip -plibtsdp1                --dbg-package=libtsdp1-dbg
+	dh_strip -pbolo                    --dbg-package=bolo-dbg
+	dh_strip -pdbolo                   --dbg-package=dbolo-dbg
+	dh_strip -pbolo-rrd-subscriber     --dbg-package=bolo-rrd-subscriber-dbg
+	dh_strip -pbolo-pg-subscriber      --dbg-package=bolo-pg-subscriber-dbg
+	dh_strip -pbolo-console-subscriber --dbg-package=bolo-console-subscriber-dbg
+	dh_strip -pbolo-redis-subscriber   --dbg-package=bolo-redis-subscriber-dbg
+
+%:
+	dh $@

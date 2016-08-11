@@ -1,0 +1,4 @@
+/usr/sbin/dbolo
+/usr/share/man/man5/dbolo.conf.5
+/usr/share/man/man1/dbolo.1
+examples/dbolo.conf etc
