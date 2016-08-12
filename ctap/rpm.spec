@@ -1,6 +1,6 @@
 Name:           ctap
 Version:        2.0.0
-Release:        1%{?dist}
+Release:        1%{?dist}.nifty1
 Summary:        Test Anything Protocol for C
 
 Group:          System Environment/Libraries
@@ -43,5 +43,5 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Fri Oct 16 2015 James Hunt <james@niftylogiccom> 2.0.0-1
-- Initial RPM package
+* Thu Aug 11 2016 James Hunt <pkg@niftylogic.com> 2.0.0-1.nifty1
+- Initial rpmification via bolo/builds

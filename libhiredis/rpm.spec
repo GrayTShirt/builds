@@ -1,6 +1,6 @@
 Name:           libhiredis
 Version:        0.13.3
-Release:        1%{?dist}
+Release:        1%{?dist}.nifty1
 Summary:        A minimalistic C client library for the Redis database
 
 Group:          System Environment/Libraries
@@ -67,5 +67,5 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Mon Aug  8 2016 James Hunt <james@niftylogic.com> 0.13.3-1
-- Initial RPM package
+* Thu Aug 11 2016 James Hunt <pkg@niftylogic.com> 0.13.3-1.nifty1
+- Initial rpmification via bolo/builds

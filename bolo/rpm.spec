@@ -1,7 +1,7 @@
 Name:           bolo
 Version:        0.2.18
-Release:        1%{?dist}
-Summary:        Monitoring System Server
+Release:        1%{?dist}.nifty1
+Summary:        Monitoring System
 
 Group:          Applications/System
 License:        GPLv3+
@@ -366,54 +366,5 @@ write user subscribers.
 
 #######################################################################
 %changelog
-* Mon Aug  8 2016 James Hunt <james@niftylogic.com> 0.2.18-1
-- Upstream release
-- Rename dbolo and subscriber packages
-- Split out libraries from bolo-libs into libbolo1 and libtsdp1
-- Remove libtool archive files (*.la) from devel packages
-
-* Mon Aug  8 2016 James Hunt <james@niftylogic.com> 0.2.17-1
-- Upstream release
-
-* Mon Oct 12 2015 James Hunt <james@niftylogic.com> 0.2.15-1
-- package bolo2redis subscriber
-
-* Thu Oct 12 2015 James Hunt <james@niftylogic.com> 0.2.14-1
-- Upstream release - beacon support
-
-* Thu Oct 12 2015 James Hunt <james@niftylogic.com> 0.2.13-1
-- Package bcache subscriber
-
-* Thu Aug  6 2015 James Hunt <james@niftylogic.com> 0.2.12-2
-- Package bolo2meta subscriber
-
-* Tue Aug  4 2015 James Hunt <james@niftylogic.com> 0.2.12-1
-- New release
-
-* Tue Jul 28 2015 James Hunt <james@niftylogic.com> 0.2.10-2
-- Package new man pages for dbolo(1) and dbolo.conf(5)
-
-* Mon Jul 27 2015 James Hunt <james@niftylogic.com> 0.2.10-1
-- Upstream release
-
-* Thu Jul 23 2015 James Hunt <james@niftylogic.com> 0.2.9-1
-- Upstream release (memory leak fix)
-
-* Wed Jul 22 2015 James Hunt <james@niftylogic.com> 0.2.8-1
-- Upstream release
-
-* Wed Jul 15 2015 James Hunt <james@niftylogic.com> 0.2.7-1
-- Upstream release
-
-* Thu Jul  2 2015 James Hunt <james@niftylogic.com> 0.2.6-1
-- Upstream release
-
-* Wed Jun 10 2015 James Hunt <james@niftylogic.com> 0.2.5-1
-- Upstream release
-
-* Tue Jun  9 2015 James Hunt <james@niftylogic.com> 0.2.4-2
-- Force bolo2pg and bolo2rrd subscribers via ./configure options
-- Package init scripts and pre/post chckonfig/service magic
-
-* Tue May 19 2015 James Hunt <james@niftylogic.com> 0.2.4-1
-- Initial RPM package
+* Thu Aug 11 2016 James Hunt <pkg@niftylogic.com> 0.2.18-1.nifty1
+- Initial rpmification via bolo/builds

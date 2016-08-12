@@ -21,6 +21,7 @@ case ${FLAVOR} in
 (debuild)
   cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian
+  sed -i -e "s/ unstable; urgency=/ ${DIST}; urgency=/" ${HOME}/debuild/debian/changelog
   case ${DIST} in
   (vivid)
     # Installing /home/builder/debuild/debian/tmp/usr/lib/x86_64-linux-gnu/perl5/5.20/auto/RRDs/RRDs.so

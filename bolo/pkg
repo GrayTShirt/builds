@@ -39,6 +39,7 @@ case ${FLAVOR} in
 
   cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian
+  sed -i -e "s/ unstable; urgency=/ ${DIST}; urgency=/" ${HOME}/debuild/debian/changelog
 
   cd ${HOME}/debuild
   tar -xz --strip-components 1 -f ../${NAME}_${VERSION}.orig.tar.gz

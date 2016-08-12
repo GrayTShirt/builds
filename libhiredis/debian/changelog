@@ -1,5 +1,5 @@
-libhiredis (0.13.3-1) unstable; urgency=low
+libhiredis (0.13.3-1.nifty1) unstable; urgency=low
 
-  * Initial Debian Package
+  * Initial debification via bolo/builds
 
- -- James Hunt <james@niftylogic.com>  Mon,  8 Aug 2016 13:14:00 +0000
+ -- James Hunt <pkg@niftylogic.com>  Thu, 11 Aug 2016 10:00:00 -0400

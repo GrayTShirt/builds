@@ -2,7 +2,7 @@
 
 Name:           rrdtool
 Version:        1.6.0
-Release:        1%{?dist}
+Release:        1%{?dist}.nifty1
 Summary:        Round Robin Database Tool to store and display time-series data
 
 Group:          Applications/Databases
@@ -202,5 +202,5 @@ test "$1" != 0 || /usr/sbin/userdel %rrdcached_user &>/dev/null || :
 %endif
 
 %changelog
-* Mon Aug  8 2016 James Hunt <james@niftylogic.com> 1.6.0-1
-- Initial RPM packaging
+* Thu Aug 11 2016 James Hunt <pkg@niftylogic.com> 1.6.0-1.nifty1
+- Initial rpmification via bolo/builds

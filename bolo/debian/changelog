@@ -1,5 +1,5 @@
-bolo (0.2.3-1) precise; urgency=low
+bolo (0.2.18-1.nifty1) unstable; urgency=low
 
-  * Stub changelog, built by changelog-generator
+  * Initial debification via bolo/builds
 
- -- Package Builder <packages@niftylogic.com>  Tue, 19 May 2015 22:09:20 -0400
+ -- James Hunt <pkg@niftylogic.com>  Thu, 11 Aug 2016 10:00:00 -0400

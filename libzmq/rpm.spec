@@ -1,6 +1,6 @@
 Name:           libzmq
 Version:        4.1.5
-Release:        1%{?dist}.bolo1
+Release:        1%{?dist}.nifty1
 Summary:        Distributed Messaging
 
 Group:          System Environment/Libraries
@@ -83,8 +83,5 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sun Aug  7 2016 James Hunt <james@niftylogic.com> 4.1.5-1
-- Upstream release
-
-* Sat Oct 24 2015 James Hunt <james@niftylogic.com> 4.1.3-1
-- Initial RPM package
+* Thu Aug 11 2016 James Hunt <pkg@niftylogic.com> 1.4.5-1.nifty1
+- Initial rpmification via bolo/builds

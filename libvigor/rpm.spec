@@ -1,6 +1,6 @@
 Name:           libvigor
 Version:        1.2.10
-Release:        1%{?dist}
+Release:        1%{?dist}.nifty1
 Summary:        Missing Bits of C
 
 Group:          System Environment/Libraries
@@ -68,14 +68,5 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sun Aug  7 2016 James Hunt <james@niftylogic.com> 1.2.10-1
-- Upstream release
-
-* Sat Oct 24 2015 James Hunt <james@niftylogic.com> 1.2.8-1
-- Upstream release
-
-* Wed Jun 10 2015 James Hunt <james@niftylogic.com> 1.2.7-1
-- Upstream release
-
-* Tue May 19 2015 James Hunt <james@niftylogic.com> 1.2.6-1
-- Initial RPM package
+* Thu Aug 11 2016 James Hunt <pkg@niftylogic.com> 1.2.10-1.nifty1
+- Initial rpmification via bolo/builds

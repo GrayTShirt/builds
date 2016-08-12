@@ -1,6 +1,6 @@
 Name:           libsodium
 Version:        1.0.11
-Release:        1%{?dist}.bolo1
+Release:        1%{?dist}.nifty1
 Summary:        Modern cryptography library
 
 Group:          System Environment/Libraries
@@ -76,5 +76,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/libsodium.pc
 
 %changelog
-* Sat Oct 24 2015 James Hunt <james@niftylogiccom> 1.0.3-1
-- Initial RPM package
+* Thu Aug 11 2016 James Hunt <pkg@niftylogic.com> 1.0.3-1.nifty1
+- Initial rpmification via bolo/builds
