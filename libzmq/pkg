@@ -20,10 +20,9 @@ curl -LO ${SOURCE_URL}
 sudo mkdir -p /pub/${OS}/${DIST}/
 case ${FLAVOR} in
 (debuild)
-  sudo curl -L -o /etc/apt/sources.list.d/niftylogic.list \
-    http://pkg.niftylogic.com/${OS}/${DIST}/niftylogic.list
+  curl -Ls http://pkg.niftylogic.com/setup | sudo sh
   sudo apt-get update
-  sudo apt-get install -y --force-yes libsodium-dev libsodium13
+  sudo apt-get install -y libsodium-dev libsodium13
 
   cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian
@@ -37,8 +36,7 @@ case ${FLAVOR} in
   ;;
 
 (rpmbuild)
-  sudo curl -L -o /etc/yum.repos.d/niftylogic.repo \
-    http://pkg.niftylogic.com/centos/niftylogic.repo
+  curl -Ls http://pkg.niftylogic.com/setup | sudo sh
   sudo yum install -y libsodium-devel libsodium
 
   cp ${ARCHIVE} ${HOME}/rpm

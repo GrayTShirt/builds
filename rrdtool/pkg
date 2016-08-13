@@ -31,7 +31,7 @@ case ${FLAVOR} in
     ;;
   esac
   sudo apt-get update
-  sudo apt-get install -y --force-yes \
+  sudo apt-get install -y \
     libfreetype6-dev \
     libpng12-dev \
     zlib1g-dev \

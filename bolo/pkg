@@ -27,10 +27,7 @@ tar -czf $ARCHIVE ${NAME}-${VERSION}/
 sudo mkdir -p /pub/${OS}/${DIST}/
 case ${FLAVOR} in
 (debuild)
-  sudo curl -L -o /etc/apt/sources.list.d/niftylogic.list \
-    http://pkg.niftylogic.com/${OS}/${DIST}/niftylogic.list
-  sudo apt-get update
-  sudo apt-get install -y --force-yes \
+  sudo apt-get install -y \
     ctap \
     libsodium-dev libsodium13 \
     libzmq-dev libzmq5 \
@@ -57,8 +54,7 @@ case ${FLAVOR} in
   ;;
 
 (rpmbuild)
-  sudo curl -L -o /etc/yum.repos.d/niftylogic.repo \
-    http://pkg.niftylogic.com/centos/niftylogic.repo
+  curl -Ls http://pkg.niftylogic.com/setup | sudo sh
   sudo yum install -y \
     ctap \
     libsodium-devel libsodium \
