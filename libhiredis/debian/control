@@ -20,7 +20,7 @@ Description: Minimalistic C client library for the Redis database
 Package: libhiredis-dev
 Architecture: any
 Section: libdevel
-Depends: libhiredis0.13 (= ${binary:Version}), ${misc:Depends}, ${shlibs:Depends}
+Depends: libhiredis0.13 (= ${binary:Version}), ${misc:Depends}
 Description: Minimalistic C client library for the Redis database - development tools
  libhiredis provides minimal support for the Redis protocol, but wraps in a
  high level, printf-like API.  It supports sending commands and receiving

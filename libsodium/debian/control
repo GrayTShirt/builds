@@ -26,7 +26,7 @@ Description: Modern cryptography library
 Package: libsodium-dev
 Architecture: any
 Section: libdevel
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}
 Description: Modern cryptography library - development tools
  Sodium is a modern, easy-to-use software library for encryption, decryption,
  signatures, password hashing and more. It is a portable, cross-compilable,

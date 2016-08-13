@@ -26,7 +26,7 @@ Description: Distributed Messaging
 Package: libzmq-dev
 Architecture: any
 Section: libdevel
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}
 Description: Distributed Messaging - development tools
  ZeroMQ (also known as ØMQ, 0MQ, or zmq) looks like an embeddable networking
  library but acts like a concurrency framework. It gives you sockets that carry
