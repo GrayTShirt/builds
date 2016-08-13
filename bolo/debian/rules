@@ -33,6 +33,8 @@ override_dh_strip:
 	dh_strip -pbolo-pg-subscriber      --dbg-package=bolo-pg-subscriber-dbg
 	dh_strip -pbolo-console-subscriber --dbg-package=bolo-console-subscriber-dbg
 	dh_strip -pbolo-redis-subscriber   --dbg-package=bolo-redis-subscriber-dbg
+	dh_strip -pbolo-meta-subscriber    --dbg-package=bolo-meta-subscriber-dbg
+	dh_strip -pbolo-log-subscriber     --dbg-package=bolo-log-subscriber-dbg
 
 %:
 	dh $@

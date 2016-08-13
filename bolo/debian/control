@@ -177,7 +177,7 @@ Description: Monitoring System RRD Subscriber
  bolo is a lightweight and scalable monitoring system that can
  track samples, counters, states and configuration data.
  .
- This package provides the RRD subscriber for bolo.
+ This package provides the console subscriber for bolo.
 
 Package: bolo-console-subscriber-dbg
 Architecture: any
@@ -188,7 +188,7 @@ Description: Debugging Symbols for Monitoring System Console Subscriber
  bolo is a lightweight and scalable monitoring system that can
  track samples, counters, states and configuration data.
  .
- This package provides debugging symbols for the Console subscriber for
+ This package provides debugging symbols for the console subscriber for
  bolo.
 
 Package: bolo-redis-subscriber
@@ -210,4 +210,46 @@ Description: Debugging Symbols for Monitoring System Redis Subscriber
  track samples, counters, states and configuration data.
  .
  This package provides debugging symbols for the Redis subscriber for
+ bolo.
+
+Package: bolo-meta-subscriber
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System Redis Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the meta subscriber for bolo.
+
+Package: bolo-meta-subscriber-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-meta-subscriber (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Redis Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the meta subscriber for
+ bolo.
+
+Package: bolo-log-subscriber
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Monitoring System Redis Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides the log subscriber for bolo.
+
+Package: bolo-log-subscriber-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-log-subscriber (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Redis Subscriber
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the log subscriber for
  bolo.

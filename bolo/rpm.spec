@@ -87,6 +87,7 @@ fi
 %{_bindir}/bolo
 %{_sbindir}/bolo
 %{_initrddir}/bolo
+%doc %{_datadir}/bolo
 %config %{_sysconfdir}/bolo.conf
 %{_mandir}/man5/bolo.conf.5.gz
 %{_mandir}/man1/bolo-aggr.1.gz
@@ -247,6 +248,40 @@ fi
 
 
 #######################################################################
+%package console-subscriber
+Summary:        Monitoring System Console Subscriber
+Group:          Applications/System
+
+%description console-subscriber
+bolo is a lightweight and scalable monitoring system that can
+track samples, counters, states and configuration data.
+
+This package provides the console subscriber component for bolo.
+
+
+%files console-subscriber
+%defattr(-,root,root,-)
+%{_sbindir}/bolo2console
+
+
+#######################################################################
+%package log-subscriber
+Summary:        Monitoring System Log Subscriber
+Group:          Applications/System
+
+%description log-subscriber
+bolo is a lightweight and scalable monitoring system that can
+track samples, counters, states and configuration data.
+
+This package provides the log subscriber component for bolo.
+
+
+%files log-subscriber
+%defattr(-,root,root,-)
+%{_sbindir}/bolo2log
+
+
+#######################################################################
 %package meta-subscriber
 Summary:        Monitoring System Meta Subscriber
 Group:          Applications/System
@@ -280,25 +315,6 @@ fi
 %{_sbindir}/bolo2meta
 %{_initrddir}/bolo2meta
 %{_mandir}/man8/bolo2meta.8.gz
-
-
-#######################################################################
-%package utils
-Summary:        Monitoring System Utils
-Group:          Applications/System
-
-%description utils
-bolo is a lightweight and scalable monitoring system that can
-track samples, counters, states and configuration data.
-
-This package provides utility components for bolo.
-
-
-%files utils
-%defattr(-,root,root,-)
-%{_sbindir}/bolo2console
-%{_sbindir}/bolo2log
-%doc %{_datadir}/bolo
 
 
 #######################################################################
