@@ -16,14 +16,36 @@ bail() {
 while [[ $# != 0 ]]; do
   case "${1}" in
   (all)
-    PACKAGES+=( ctap )
-    PACKAGES+=( libhiredis )
-    PACKAGES+=( libsodium )
-    PACKAGES+=( libzmq )
-    PACKAGES+=( libvigor )
-    PACKAGES+=( rrdtool )
-    PACKAGES+=( bolo )
-    PACKAGES+=( bolo-collectors )
+    echo "##################################  BUILDING PHASE I"
+    $0 ctap libhiredis libsodium rrdtool
+    echo ; echo ; echo
+    echo "PHASE I COMPLETE"
+    echo -n "Please sync packages to pkg.niftylogic.com and press <Enter> "
+    read JUNK
+
+    echo ; echo ; echo
+    echo "##################################  BUILDING PHASE II"
+    $0 libzmq
+    echo ; echo ; echo
+    echo "PHASE II COMPLETE"
+    echo -n "Please sync packages to pkg.niftylogic.com and press <Enter> "
+    read JUNK
+
+    echo ; echo ; echo
+    echo "##################################  BUILDING PHASE III"
+    $0 libvigor
+    echo ; echo ; echo
+    echo "PHASE III COMPLETE"
+    echo -n "Please sync packages to pkg.niftylogic.com and press <Enter> "
+    read JUNK
+
+    echo ; echo ; echo
+    echo "##################################  BUILDING PHASE IV"
+    $0 bolo bolo-collectors
+    echo ; echo ; echo
+    echo "PHASE IV COMPLETE"
+    echo "DONE"
+    exit 0
     ;;
   (ctap|libhiredis|libsodium|libvigor|libzmq|rrdtool|bolo|bolo-collectors)
     PACKAGES+=( $1 )
