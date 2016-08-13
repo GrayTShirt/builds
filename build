@@ -13,8 +13,14 @@ bail() {
   exit 2
 }
 
+OK=
 while [[ $# != 0 ]]; do
   case "${1}" in
+  (clean)
+    echo "Removing dead Docker containers"
+    docker ps -a | grep xited | awk '{print $1}' | xargs -r docker rm
+    OK=yes
+    ;;
   (all)
     set -e
     echo "##################################  BUILDING PHASE I"
@@ -74,7 +80,7 @@ while [[ $# != 0 ]]; do
   shift
 done
 
-if [[ ${#PACKAGES[@]} == 0 ]]; then
+if [[ -z $OK && ${#PACKAGES[@]} == 0 ]]; then
   cat <<END
 
 You must specify what packages you want to build:

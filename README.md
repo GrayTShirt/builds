@@ -55,6 +55,18 @@ somewhere else, i.e.:
 (`/tmp/pub` is as good a place as any to put these files.)
 
 
+Cleanup
+-------
+
+It's probably a good idea to run cleanup routines once in a while:
+
+    ./build clean
+
+You can actually integrate this with other `build` calls:
+
+    ./build clean all
+
+
 Anatomy of a Build
 ------------------
 
