@@ -53,7 +53,7 @@ This package contains the header files for developing code against libzmq.
 
 %build
 %configure
-make %{?_smp_mflags}
+make -j4 %{?_smp_mflags}
 
 
 %install

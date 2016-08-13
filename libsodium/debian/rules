@@ -5,4 +5,4 @@ override_dh_strip:
 	dh_strip --dbg-package=libsodium13-dbg
 
 %:
-	dh $@
+	dh $@ --parallel
