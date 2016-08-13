@@ -50,8 +50,6 @@ case ${FLAVOR} in
   ;;
 
 (rpmbuild)
-  sudo curl -L -o /etc/yum.repos.d/niftylogic.repo \
-    http://pkg.niftylogic.com/centos/niftylogic.repo
   sudo yum install -y \
     gcc-c++ \
     openssl-devel \
