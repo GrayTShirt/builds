@@ -23,7 +23,7 @@ case ${FLAVOR} in
   sudo curl -L -o /etc/apt/sources.list.d/niftylogic.list \
     http://pkg.niftylogic.com/${OS}/${DIST}/niftylogic.list
   sudo apt-get update
-  sudo apt-get install -y --force-yes libsodium-dev libsodium13
+  sudo apt-get install -y --force-yes libsodium-dev libsodium13 docbook-xml
 
   cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
   cp -a /srv/debian/ ${HOME}/debuild/debian
