@@ -1,0 +1,6 @@
+usr/lib/bolo/collectors/files
+usr/lib/bolo/collectors/hostinfo
+usr/lib/bolo/collectors/linux
+usr/lib/bolo/collectors/netstat
+usr/lib/bolo/collectors/process
+usr/lib/bolo/collectors/tcp

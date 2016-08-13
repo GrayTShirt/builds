@@ -1,0 +1,177 @@
+Source: bolo-collectors
+Section: admin
+Priority: optional
+Maintainer: James Hunt <pkg@niftylogic.com>
+Homepage: https://github.com/bolo/bolo-collectors
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8),
+               iptables,
+               iptables-dev,
+               libcurl3,
+               libcurl4-openssl-dev,
+               libmysqlclient-dev,
+               libpq-dev,
+               libpq5,
+               librrd-dev,
+               librrd8,
+               libvigor-dev,
+               libvigor1
+
+Package: bolo-collectors
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, ${perl:Depends}
+Recommends: dbolo
+Description: Monitoring System Collectors
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides a set of baseline collectors for system metrics.
+
+Package: bolo-collectors-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-collectors (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Collectors
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for baseline collectors.
+
+
+Package: bolo-collectors-clockwork
+Architecture: any
+Depends: ${misc:Depends}, ${perl:Depends}
+Recommends: dbolo
+Description: Monitoring System Collectors for Clockwork
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides a collector for monitoring the health of
+ the cogd agent for health and functionality.
+
+Package: bolo-collectors-fw
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Recommends: dbolo
+Description: Monitoring System Collectors for Firewalls
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides a collector for monitoring the traffic
+ transiting an iptables / ip6tables firewall.
+
+Package: bolo-collectors-fw-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-collectors-fw (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Collectors for Firewalls
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the fw collector.
+
+
+Package: bolo-collectors-httpd
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Recommends: dbolo
+Description: Monitoring System Collectors for HTTP Web Servers
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides a collector that monitors the health of HTTP
+ web servers like Apache and nginx, via their scoreboard endpoints.
+
+Package: bolo-collectors-httpd-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-collectors-httpd (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols Monitoring System Collectors for HTTP Web Servers
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the httpd collector.
+
+
+Package: bolo-collectors-mysql
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Recommends: dbolo
+Description: Monitoring System Collectors for MySQL
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides a collector for monitoring the health of a
+ MySQL database server and its databases.
+
+Package: bolo-collectors-mysql-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-collectors-mysql (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Collectors for MySQL
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the mysql collector.
+
+
+Package: bolo-collectors-nagios
+Architecture: any
+Depends: ${misc:Depends}, ${perl:Depends}
+Recommends: dbolo
+Description: Monitoring System Collectors for Nagios Plugins
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides a collector that wraps pre-existing Nagios
+ check plugins.
+
+
+Package: bolo-collectors-postgres
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Recommends: dbolo
+Description: Monitoring System Collectors for PostgreSQL
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides a collector for monitoring the health of a
+ PostgreSQL cluster and its databases.
+
+Package: bolo-collectors-postgres-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-collectors-postgres (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Collectors for PostgreSQL
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the postgres collector.
+
+
+Package: bolo-collectors-rrdcache
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Recommends: dbolo
+Description: Monitoring System Collectors for rrdcached
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides a collector for monitoring the health of the
+ rrdcached RRDtool caching daemon.
+
+Package: bolo-collectors-rrdcache-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: bolo-collectors-rrdcache (= ${binary:Version}), ${misc:Depends}
+Description: Debugging Symbols for Monitoring System Collectors for rrdcached
+ bolo is a lightweight and scalable monitoring system that can
+ track samples, counters, states and configuration data.
+ .
+ This package provides debugging symbols for the rrdcache collector.

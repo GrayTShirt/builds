@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+export CFLAGS=-Wall -g
+export CPPFLAGS=-I/usr/include -I/usr/include/hiredis -I/usr/include/postgresql -I/usr/include/mysql
+
+.PHONY: override_dh_auto_configure \
+        override_dh_auto_test \
+        override_dh_strip
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+	  --with-all-collectors
+
+override_dh_auto_test:
+	# noop
+
+override_dh_strip:
+	dh_strip -pbolo-collectors            --dbg-package=bolo-collectors-dbg
+	dh_strip -pbolo-collectors-fw         --dbg-package=bolo-collectors-fw-dbg
+	dh_strip -pbolo-collectors-httpd      --dbg-package=bolo-collectors-httpd-dbg
+	dh_strip -pbolo-collectors-mysql      --dbg-package=bolo-collectors-mysql-dbg
+	dh_strip -pbolo-collectors-postgres   --dbg-package=bolo-collectors-postgres-dbg
+	dh_strip -pbolo-collectors-rrdcache   --dbg-package=bolo-collectors-rrdcache-dbg
+
+%:
+	dh $@

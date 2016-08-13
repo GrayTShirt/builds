@@ -1,0 +1,94 @@
+#!/bin/bash
+set -eu
+NAME=bolo-collectors
+VERSION=0.4.13
+ARCHIVE=${NAME}-${VERSION}.tar.gz
+SOURCE_URL=https://github.com/bolo/${NAME}/releases/download/v${VERSION}/${ARCHIVE}
+
+for var in FLAVOR DIST; do
+	val=$(eval echo \$$var)
+	if [[ -z $val ]]; then
+		echo >&2 "\$$var not defined in environment (are you in the rpmbuild/debuid Docker container?)"
+		exit 1
+	fi
+done
+
+cd ${HOME}
+curl -LO ${SOURCE_URL}
+case ${DIST} in
+(el5)
+  tar -xzf $ARCHIVE
+  pushd ${NAME}-${VERSION}
+  sed -i -e 's/-lip4tc -lip6tc/-liptc/' configure.ac
+  sed -i -e 's/-lip4tc -lip6tc/-liptc/' Makefile.am
+  sed -i -e 's/cos,floor,//' configure.ac
+  ls -l
+  ./bootstrap
+  popd
+  tar -czf $ARCHIVE ${NAME}-${VERSION}/
+  ;;
+esac
+
+sudo mkdir -p /pub/${OS}/${DIST}/
+case ${FLAVOR} in
+(debuild)
+  sudo curl -L -o /etc/apt/sources.list.d/niftylogic.list \
+    http://pkg.niftylogic.com/${OS}/${DIST}/niftylogic.list
+  sudo apt-get update
+  sudo apt-get install -y --force-yes \
+    ctap \
+    libzmq-dev libzmq5 \
+    iptables-dev iptables \
+    libcurl4-openssl-dev \
+    libmysqlclient-dev \
+    libpq-dev libpq5 \
+    librrd-dev librrd8 \
+    libvigor-dev libvigor1
+
+  cp ${ARCHIVE} ${HOME}/${NAME}_${VERSION}.orig.tar.gz
+  cp -a /srv/debian/ ${HOME}/debuild/debian
+  sed -i -e "s/ unstable; urgency=/ ${DIST}; urgency=/" ${HOME}/debuild/debian/changelog
+
+  cd ${HOME}/debuild
+  tar -xz --strip-components 1 -f ../${NAME}_${VERSION}.orig.tar.gz
+  debuild -i -us -uc -b
+  find .. -name '*.deb' -o -name '*.dsc' -o -name '*.tar.gz' |\
+    xargs -I@ sudo cp @ /pub/${OS}/${DIST}
+  ;;
+
+(rpmbuild)
+  sudo curl -L -o /etc/yum.repos.d/niftylogic.repo \
+    http://pkg.niftylogic.com/centos/niftylogic.repo
+  sudo yum install -y \
+    ctap \
+    libzmq-devel \
+    pcre-devel \
+    libcurl-devel \
+    mysql-devel \
+    rrdtool-devel \
+    postgresql-devel \
+    iptables-devel \
+    libvigor-devel
+  echo "dist is ${DIST}"
+  case ${DIST} in
+  (el5) sudo yum install -y    curl-devel ;;
+  (*)   sudo yum install -y libcurl-devel ;;
+  esac
+
+
+  export CFLAGS='-I/usr/include/mysql -L/usr/lib64/mysql'
+
+  cp ${ARCHIVE} ${HOME}/rpm
+  rpmbuild -ba /srv/rpm.spec
+  find .. -name '*.rpm' |\
+    xargs -I@ sudo cp @ /pub/${OS}/${DIST}
+  ;;
+
+(*)
+  echo >&2 "UNHANDLED FLAVOR \`${FLAVOR}'!"
+  exit 2
+  ;;
+esac
+
+echo "SUCCESS"
+exit 0

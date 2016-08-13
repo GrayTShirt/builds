@@ -1,0 +1,6 @@
+usr/lib/bolo/collectors/snmp_cisco
+usr/lib/bolo/collectors/snmp_cisco_detect
+usr/lib/bolo/collectors/snmp_cisco_ifaces
+usr/lib/bolo/collectors/snmp_cisco_sys
+usr/lib/bolo/collectors/snmp_ifaces
+usr/lib/bolo/collectors/snmp_system

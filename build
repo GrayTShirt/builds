@@ -23,8 +23,9 @@ while [[ $# != 0 ]]; do
     PACKAGES+=( libvigor )
     PACKAGES+=( rrdtool )
     PACKAGES+=( bolo )
+    PACKAGES+=( bolo-collectors )
     ;;
-  (ctap|libhiredis|libsodium|libvigor|libzmq|rrdtool|bolo)
+  (ctap|libhiredis|libsodium|libvigor|libzmq|rrdtool|bolo|bolo-collectors)
     PACKAGES+=( $1 )
     ;;
   (*/*)
