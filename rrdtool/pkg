@@ -44,7 +44,7 @@ case ${FLAVOR} in
 
   cd ${HOME}/debuild
   tar -xz --strip-components 1 -f ../${NAME}_${VERSION}.orig.tar.gz
-  debuild -i -us -uc -b
+  DEB_BUILD_OPTIONS=parallel=4 debuild -i -us -uc -b
   find .. -name '*.deb' -o -name '*.dsc' -o -name '*.tar.gz' |\
     xargs -I@ sudo cp @ /pub/${OS}/${DIST}
   ;;

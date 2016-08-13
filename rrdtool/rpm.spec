@@ -101,8 +101,7 @@ daemon was written to alleviate these problems.
 %{__perl} -pi.orig -e 's|-Wl,--rpath -Wl,\$rp||g' \
     bindings/perl-shared/Makefile.PL
 
-#{__make} %{?_smp_mflags}
-make
+make -j4 %{?_smp_mflags}
 
 # Fix @perl@ and @PERL@
 find examples/ -type f \
