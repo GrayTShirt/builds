@@ -14,8 +14,6 @@ BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  libsodium-devel
-BuildRequires:  asciidoc
-BuildRequires:  xmlto
 
 Requires: libsodium
 
@@ -52,7 +50,7 @@ This package contains the header files for developing code against libzmq.
 
 
 %build
-%configure
+%configure --with-libsodium --without-documentation
 make -j4 %{?_smp_mflags}
 
 
@@ -69,9 +67,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_libdir}/libzmq.so*
 %{_bindir}/curve_keygen
-%doc
-%{_mandir}/man3/zmq*
-%{_mandir}/man7/zmq*
 
 
 %files devel

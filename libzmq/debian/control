@@ -7,8 +7,7 @@ Homepage: http://zeromq.org
 Build-Depends: debhelper (>= 8.0.0),
                libtool,
                libsodium13,
-               libsodium-dev,
-               docbook-xml
+               libsodium-dev
 
 Package: libzmq5
 Architecture: any
