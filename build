@@ -16,6 +16,7 @@ bail() {
 while [[ $# != 0 ]]; do
   case "${1}" in
   (all)
+    set -e
     echo "##################################  BUILDING PHASE I"
     $0 ctap libhiredis libsodium rrdtool
     echo ; echo ; echo
