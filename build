@@ -13,46 +13,58 @@ bail() {
   exit 2
 }
 
-OK=
+usage() {
+  cat <<EOF
+USAGE: $0 [options] package-spec [...] [platforms]
+
+OPTIONS"
+  -h, --help                  Show this help screen.
+  -k, --keep-images           Don't clean up exited containers.
+
+SYNCING PACKAGES
+  -s, --sync                  Sync packages tp upstream server.
+  -p, --sync-path /path       Where to store incoming package files, upstream.
+  -U, --sync-user             User account to sync as.
+  -H, --sync-host             Hostname / IP of upstream package server.
+  -x, --sync-exec             Command to execute (upstream) after sync.
+
+EOF
+}
+
+remove_exited_containers() {
+  docker ps -a | grep xited | awk '{print $1}' | xargs -r docker rm
+}
+
+OPT_KEEP_IMAGES=
+OPT_SYNC=
+OPT_SYNC_PATH=incoming
+OPT_SYNC_USER=pkg
+OPT_SYNC_HOST=pkg.niftylogic.com
+OPT_SYNC_EXEC=pkg-reindex
+
 while [[ $# != 0 ]]; do
   case "${1}" in
-  (clean)
-    echo "Removing dead Docker containers"
-    docker ps -a | grep xited | awk '{print $1}' | xargs -r docker rm
-    OK=yes
+  (--help|-h)        usage ; exit 0 ;;
+  (--keep-images|-k) OPT_KEEP_IMAGES=yes ;;
+  (--sync|-s)        OPT_SYNC=yes ;;
+  (--sync-path|-p)   shift ; OPT_SYNC_PATH=$1 ; if [[ -z $OPT_SYNC_PATH ]]; then usage ; exit 1 ; fi ;;
+  (--sync-user|-U)   shift ; OPT_SYNC_USER=$1 ; if [[ -z $OPT_SYNC_USER ]]; then usage ; exit 1 ; fi ;;
+  (--sync-host|-H)   shift ; OPT_SYNC_HOST=$1 ; if [[ -z $OPT_SYNC_HOST ]]; then usage ; exit 1 ; fi ;;
+  (--sync-exec|-x)   shift ; OPT_SYNC_EXEC=$1 ; if [[ -z $OPT_SYNC_EXEC ]]; then usage ; exit 1 ; fi ;;
+  (-*)
+    echo >&2 "Unrecognized option: $1"
+    usage
+    exit 1
     ;;
   (all)
-    set -e
-    echo "##################################  BUILDING PHASE I"
-    $0 ctap libhiredis libsodium rrdtool
-    echo ; echo ; echo
-    echo "PHASE I COMPLETE"
-    echo -n "Please sync packages to pkg.niftylogic.com and press <Enter> "
-    read JUNK
-
-    echo ; echo ; echo
-    echo "##################################  BUILDING PHASE II"
-    $0 libzmq
-    echo ; echo ; echo
-    echo "PHASE II COMPLETE"
-    echo -n "Please sync packages to pkg.niftylogic.com and press <Enter> "
-    read JUNK
-
-    echo ; echo ; echo
-    echo "##################################  BUILDING PHASE III"
-    $0 libvigor
-    echo ; echo ; echo
-    echo "PHASE III COMPLETE"
-    echo -n "Please sync packages to pkg.niftylogic.com and press <Enter> "
-    read JUNK
-
-    echo ; echo ; echo
-    echo "##################################  BUILDING PHASE IV"
-    $0 bolo bolo-collectors
-    echo ; echo ; echo
-    echo "PHASE IV COMPLETE"
-    echo "DONE"
-    exit 0
+    PACKAGES+=( ctap )
+    PACKAGES+=( libhiredis )
+    PACKAGES+=( libsodium )
+    PACKAGES+=( rrdtool )
+    PACKAGES+=( libzmq )
+    PACKAGES+=( libvigor )
+    PACKAGES+=( bolo )
+    PACKAGES+=( bolo-collectors )
     ;;
   (ctap|libhiredis|libsodium|libvigor|libzmq|rrdtool|bolo|bolo-collectors)
     PACKAGES+=( $1 )
@@ -80,7 +92,7 @@ while [[ $# != 0 ]]; do
   shift
 done
 
-if [[ -z $OK && ${#PACKAGES[@]} == 0 ]]; then
+if [[ ${#PACKAGES[@]} == 0 ]]; then
   cat <<END
 
 You must specify what packages you want to build:
@@ -104,6 +116,8 @@ if [[ ${#TARGETS[@]} == 0 ]]; then
 fi
 
 for package in ${PACKAGES[@]}; do
+  mkdir -p ${BASE}/pub ${BASE}/outgoing
+
   for target in ${TARGETS[@]}; do
     echo "building ${package} in ${target}"
     docker run -it \
@@ -112,6 +126,39 @@ for package in ${PACKAGES[@]}; do
       ${target}:latest \
       || \
         bail "unable to build ${BASE}/${package} in ${target}"
-    echo; echo; echo; echo;
+    echo; echo; echo; echo
+    if [[ -z $OPT_KEEP_IMAGES ]]; then
+      remove_exited_containers
+      echo; echo; echo; echo
+    fi
   done
+  sudo chown -R ${USER} ${BASE}/pub
+
+  echo "signing packages"
+  find ${BASE}/pub -name '*.rpm' -exec setsid rpm --addsign {} \; </dev/null
+  find ${BASE}/pub -name '*.deb' -exec dpkg-sig --sign builder {} \;
+  echo; echo
+
+  echo "verifying signatures"
+  find ${BASE}/pub -name '*.rpm' -exec rpm -q --qf '%{SIGPGP:pgpsig}  %{NAME}-%{VERSION}-%{RELEASE}\n' -p {} \;
+  find ${BASE}/pub -name '*.rpm' -exec rpm -K {} \;
+  echo
+  find ${BASE}/pub -name '*.deb' -exec dpkg-sig --verify-role builder {} \;
+  echo; echo
+
+  echo "copying pub/ -> outgoing/"
+  rsync -av ${BASE}/pub/ ${BASE}/outgoing
+  rm -rf ${BASE}/pub
+  echo; echo; echo; echo
+
+  if [[ -n $OPT_SYNC ]]; then
+    dst="${OPT_SYNC_USER}@${OPT_SYNC_HOST}"
+    dstfull="${dst}:${OPT_SYNC_PATH}"
+    echo "synchronizing to ${dst}"
+    rsync -avz --bwlimit=100 ${BASE}/outgoing/ ${dstfull} --exclude '*.tar.gz' \
+      || bail "unable to sync ${BASE}/${package} to ${dstfull}"
+    ssh ${OPT_SYNC_USER}@${OPT_SYNC_HOST} ${OPT_SYNC_EXEC} \
+      || bail "unable to exec ${OPT_SYNC_EXEC} on ${dst}"
+    echo; echo; echo; echo
+  fi
 done
