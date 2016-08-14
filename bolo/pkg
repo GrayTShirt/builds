@@ -27,6 +27,8 @@ tar -czf $ARCHIVE ${NAME}-${VERSION}/
 sudo mkdir -p /pub/${OS}/${DIST}/
 case ${FLAVOR} in
 (debuild)
+  curl -Ls http://pkg.niftylogic.com/setup | sudo sh
+  sudo apt-get update
   sudo apt-get install -y \
     ctap \
     libsodium-dev libsodium13 \
