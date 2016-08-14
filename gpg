@@ -1,0 +1,10 @@
+#/bin/bash
+
+killall gpg-agent 2>/dev/null
+export GPG_TTY=$(tty)
+echo "# starting gpg-agent on TTY '$GPG_TTY', with key '$GPGKEY'"
+eval $(gpg-agent --daemon)
+echo $GPG_AGENT_INFO > ~/.gpg-agent-info
+echo "GPG_AGENT_INFO=$GPG_AGENT_INFO"
+
+echo test | gpg --use-agent --sign >/dev/null
