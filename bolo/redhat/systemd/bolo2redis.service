@@ -1,0 +1,16 @@
+[Unit]
+Description=Bolo Redis Subscriber daemon
+Documentation=man:bolo2redis(8)
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/bolo2redis
+ExecStart=/usr/sbin/bolo2redis $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/run/bolo2redis.pid
+KillMode=process
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target

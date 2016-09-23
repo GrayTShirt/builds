@@ -1,0 +1,16 @@
+[Unit]
+Description=Bolo Core Aggregator
+Documentation=man:bolo-aggr(1) man:bolo.conf(5)
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/bolo
+ExecStart=/usr/sbin/bolo aggr $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/run/bolo.pid
+KillMode=process
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target

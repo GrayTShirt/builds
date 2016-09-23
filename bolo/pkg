@@ -69,7 +69,7 @@ case ${FLAVOR} in
     ncurses-devel
 
   cp ${ARCHIVE} ${HOME}/rpm
-  rpmbuild -ba /srv/rpm.spec
+  rpmbuild -ba /srv/redhat/rpm.spec
   find .. -name '*.rpm' |\
     xargs -I@ sudo cp @ /pub/${OS}/${DIST}
   ;;

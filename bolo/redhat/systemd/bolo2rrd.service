@@ -1,0 +1,16 @@
+[Unit]
+Description=Bolo RRD Subscriber daemon
+Documentation=man:bolo2rrd(8)
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/bolo2rrd
+ExecStart=/usr/sbin/bolo2rrd $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/run/bolo2rrd.pid
+KillMode=process
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target

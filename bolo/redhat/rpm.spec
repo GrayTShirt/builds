@@ -48,12 +48,22 @@ rm -f $RPM_BUILD_ROOT%{_bindir}/bolo_nsca
 install -m 0644 -D examples/bolo.conf       $RPM_BUILD_ROOT%{_sysconfdir}/bolo.conf
 install -m 0644 -D examples/schema/pg.sql   $RPM_BUILD_ROOT%{_datadir}/bolo/schema/pg.sql
 # init scripts
-install -m 0755 -D redhat/init.d/dbolo      $RPM_BUILD_ROOT%{_initrddir}/dbolo
-install -m 0755 -D redhat/init.d/bolo       $RPM_BUILD_ROOT%{_initrddir}/bolo
-install -m 0755 -D redhat/init.d/bolo2rrd   $RPM_BUILD_ROOT%{_initrddir}/bolo2rrd
-install -m 0755 -D redhat/init.d/bolo2redis $RPM_BUILD_ROOT%{_initrddir}/bolo2redis
-install -m 0755 -D redhat/init.d/bolo2pg    $RPM_BUILD_ROOT%{_initrddir}/bolo2pg
-install -m 0755 -D redhat/init.d/bolo2meta  $RPM_BUILD_ROOT%{_initrddir}/bolo2meta
+%if 0%{?rhel} >= 7
+	install -m 0755 -D /srv/redhat/systemd/bolo.service        $RPM_BUILD_ROOT%{_unitdir}/bolo.service
+	install -m 0755 -D /srv/redhat/systemd/bolo-cache.service  $RPM_BUILD_ROOT%{_unitdir}/bolo-cache.service
+	install -m 0755 -D /srv/redhat/systemd/bolo2meta.service   $RPM_BUILD_ROOT%{_unitdir}/bolo2meta.service
+	install -m 0755 -D /srv/redhat/systemd/bolo2pg.service     $RPM_BUILD_ROOT%{_unitdir}/bolo2pg.service
+	install -m 0755 -D /srv/redhat/systemd/bolo2redis.service  $RPM_BUILD_ROOT%{_unitdir}/bolo2redis.service
+	install -m 0755 -D /srv/redhat/systemd/bolo2rrd.service    $RPM_BUILD_ROOT%{_unitdir}/bolo2rrd.service
+	install -m 0755 -D /srv/redhat/systemd/dbolo.service       $RPM_BUILD_ROOT%{_unitdir}/dbolo.service
+%else
+	install -m 0755 -D redhat/init.d/dbolo      $RPM_BUILD_ROOT%{_initrddir}/dbolo
+	install -m 0755 -D redhat/init.d/bolo       $RPM_BUILD_ROOT%{_initrddir}/bolo
+	install -m 0755 -D redhat/init.d/bolo2rrd   $RPM_BUILD_ROOT%{_initrddir}/bolo2rrd
+	install -m 0755 -D redhat/init.d/bolo2redis $RPM_BUILD_ROOT%{_initrddir}/bolo2redis
+	install -m 0755 -D redhat/init.d/bolo2pg    $RPM_BUILD_ROOT%{_initrddir}/bolo2pg
+	install -m 0755 -D redhat/init.d/bolo2meta  $RPM_BUILD_ROOT%{_initrddir}/bolo2meta
+%endif
 ln -s %{_bindir}/bolo $RPM_BUILD_ROOT%{_sbindir}/bolo
 
 # don't need the libtool archives
@@ -66,19 +76,33 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %post
-/sbin/chkconfig --add bolo
+%if 0%{?rhel} >= 7
+	/bin/systemctl daemon-reload
+	/bin/systemctl enable bolo
+%else
+	/sbin/chkconfig --add bolo
+%endif
 
 
 %preun
 if [ $1 == 0 ]; then # erase!
-	/sbin/service stop bolo
-	/sbin/chkconfig --del bolo
+	%if 0%{?rhel} >= 7
+		/bin/systemctl stop bolo
+		/bin/systemctl disable bolo
+	%else
+		/sbin/service stop bolo
+		/sbin/chkconfig --del bolo
+	%endif
 fi
 
 
 %postun
 if [ $1 == 0 ]; then # upgrade!
-	/sbin/service condrestart bolo
+	%if 0%{?rhel} >= 7
+		/bin/systemctl restart bolo
+	%else
+		/sbin/service condrestart bolo
+	%endif
 fi
 
 
@@ -86,7 +110,12 @@ fi
 %defattr(-,root,root,-)
 %{_bindir}/bolo
 %{_sbindir}/bolo
-%{_initrddir}/bolo
+%if 0%{?rhel} >= 7
+	%{_unitdir}/bolo.service
+	%{_unitdir}/bolo-cache.service
+%else
+	%{_initrddir}/bolo
+%endif
 %doc %{_datadir}/bolo
 %config %{_sysconfdir}/bolo.conf
 %{_mandir}/man5/bolo.conf.5.gz
@@ -113,26 +142,44 @@ This package provides the dbolo monitoring agent for bolo.
 
 
 %post -n dbolo
-/sbin/chkconfig --add dbolo
+%if 0%{?rhel} >= 7
+	/bin/systemctl daemon-reload
+	/bin/systemctl enable dbolo
+%else
+	/sbin/chkconfig --add dbolo
+%endif
 
 
 %preun -n dbolo
 if [ $1 == 0 ]; then # erase!
-	/sbin/service stop dbolo
-	/sbin/chkconfig --del dbolo
+	%if 0%{?rhel} >= 7
+		/bin/systemctl stop dbolo
+		/bin/systemctl disable dbolo
+	%else
+		/sbin/service stop dbolo
+		/sbin/chkconfig --del dbolo
+	%endif
 fi
 
 
 %postun -n dbolo
 if [ $1 == 0 ]; then # upgrade!
-	/sbin/service condrestart dbolo
+	%if 0%{?rhel} >= 7
+		/bin/systemctl restart dbolo
+	%else
+		/sbin/service condrestart dbolo
+	%endif
 fi
 
 
 %files -n dbolo
 %defattr(-,root,root,-)
 %{_sbindir}/dbolo
-%{_initrddir}/dbolo
+%if 0%{?rhel} >= 7
+	%{_unitdir}/dbolo.service
+%else
+	%{_initrddir}/dbolo
+%endif
 %{_mandir}/man1/dbolo.1.gz
 %{_mandir}/man5/dbolo.conf.5.gz
 
@@ -151,26 +198,44 @@ This package provides the redis subscriber component for bolo.
 
 
 %post redis-subscriber
-/sbin/chkconfig --add bolo2redis
+%if 0%{?rhel} >= 7
+	/bin/systemctl daemon-reload
+	/bin/systemctl enable bolo2redis
+%else
+	/sbin/chkconfig --add bolo2redis
+%endif
 
 
 %preun redis-subscriber
 if [ $1 == 0 ]; then # erase!
-	/sbin/service stop bolo2redis
-	/sbin/chkconfig --del bolo2redis
+	%if 0%{?rhel} >= 7
+		/bin/systemctl stop bolo2redis
+		/bin/systemctl disable bolo2redis
+	%else
+		/sbin/service stop bolo2redis
+		/sbin/chkconfig --del bolo2redis
+	%endif
 fi
 
 
 %postun redis-subscriber
 if [ $1 == 0 ]; then # upgrade!
-	/sbin/service condrestart bolo2redis
+	%if 0%{?rhel} >= 7
+		/bin/systemctl restart bolo2redis
+	%else
+		/sbin/service condrestart bolo2redis
+	%endif
 fi
 
 
 %files redis-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2redis
-%{_initrddir}/bolo2redis
+%if 0%{?rhel} >= 7
+	%{_unitdir}/bolo2redis.service
+%else
+	%{_initrddir}/bolo2redis
+%endif
 %{_mandir}/man8/bolo2redis.8.gz
 
 
@@ -187,26 +252,44 @@ This package provides the RRD subscriber component for bolo.
 
 
 %post rrd-subscriber
-/sbin/chkconfig --add bolo2rrd
+%if 0%{?rhel} >= 7
+	/bin/systemctl daemon-reload
+	/bin/systemctl enable bolo2rrd
+%else
+	/sbin/chkconfig --add bolo2rrd
+%endif
 
 
 %preun rrd-subscriber
 if [ $1 == 0 ]; then # erase!
-	/sbin/service stop bolo2rrd
-	/sbin/chkconfig --del bolo2rrd
+	%if 0%{?rhel} >= 7
+		/bin/systemctl stop bolo2rrd
+		/bin/systemctl disable bolo2rrd
+	%else
+		/sbin/service stop bolo2rrd
+		/sbin/chkconfig --del bolo2rrd
+	%endif
 fi
 
 
 %postun rrd-subscriber
 if [ $1 == 0 ]; then # upgrade!
-	/sbin/service condrestart bolo2rrd
+	%if 0%{?rhel} >= 7
+		/bin/systemctl restart bolo2rrd
+	%else
+		/sbin/service condrestart bolo2rrd
+	%endif
 fi
 
 
 %files rrd-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2rrd
-%{_initrddir}/bolo2rrd
+%if 0%{?rhel} >= 7
+	%{_unitdir}/bolo2rrd.service
+%else
+	%{_initrddir}/bolo2rrd
+%endif
 %{_mandir}/man8/bolo2rrd.8.gz
 
 
@@ -223,28 +306,45 @@ This package provides the postgres subscriber component for bolo.
 
 
 %post pg-subscriber
-/sbin/chkconfig --add bolo2pg
+%if 0%{?rhel} >= 7
+	/bin/systemctl daemon-reload
+	/bin/systemctl enable bolo2pg
+%else
+	/sbin/chkconfig --add bolo2pg
+%endif
 
 
 %preun pg-subscriber
 if [ $1 == 0 ]; then # erase!
-	/sbin/service stop bolo2pg
-	/sbin/chkconfig --del bolo2pg
+	%if 0%{?rhel} >= 7
+		/bin/systemctl stop bolo2pg
+		/bin/systemctl disable bolo2pg
+	%else
+		/sbin/service stop bolo2pg
+		/sbin/chkconfig --del bolo2pg
+	%endif
 fi
 
 
 %postun pg-subscriber
 if [ $1 == 0 ]; then # upgrade!
-	/sbin/service condrestart bolo2pg
+	%if 0%{?rhel} >= 7
+		/bin/systemctl restart bolo2pg
+	%else
+		/sbin/service condrestart bolo2pg
+	%endif
 fi
 
 
 %files pg-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2pg
-%{_initrddir}/bolo2pg
+%if 0%{?rhel} >= 7
+	%{_unitdir}/bolo2pg.service
+%else
+	%{_initrddir}/bolo2pg
+%endif
 %{_mandir}/man8/bolo2pg.8.gz
-%doc %{_datadir}/bolo
 
 
 #######################################################################
@@ -294,26 +394,44 @@ This package provides the meta subscriber component for bolo.
 
 
 %post meta-subscriber
-/sbin/chkconfig --add bolo2meta
+%if 0%{?rhel} >= 7
+	/bin/systemctl daemon-reload
+	/bin/systemctl enable bolo2meta
+%else
+	/sbin/chkconfig --add bolo2meta
+%endif
 
 
 %preun meta-subscriber
 if [ $1 == 0 ]; then # erase!
-	/sbin/service stop bolo2meta
-	/sbin/chkconfig --del bolo2meta
+	%if 0%{?rhel} >= 7
+		/bin/systemctl stop bolo2meta
+		/bin/systemctl disable bolo2meta
+	%else
+		/sbin/service stop bolo2meta
+		/sbin/chkconfig --del bolo2meta
+	%endif
 fi
 
 
 %postun meta-subscriber
 if [ $1 == 0 ]; then # upgrade!
-	/sbin/service condrestart bolo2meta
+	%if 0%{?rhel} >= 7
+		/bin/systemctl restart bolo2meta
+	%else
+		/sbin/service condrestart bolo2meta
+	%endif
 fi
 
 
 %files meta-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2meta
-%{_initrddir}/bolo2meta
+%if 0%{?rhel} >= 7
+	%{_unitdir}/bolo2meta.service
+%else
+	%{_initrddir}/bolo2meta
+%endif
 %{_mandir}/man8/bolo2meta.8.gz
 
 
