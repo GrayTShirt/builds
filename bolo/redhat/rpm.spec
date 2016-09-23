@@ -57,12 +57,12 @@ install -m 0644 -D examples/schema/pg.sql   $RPM_BUILD_ROOT%{_datadir}/bolo/sche
 	install -m 0755 -D /srv/redhat/systemd/bolo2rrd.service    $RPM_BUILD_ROOT%{_unitdir}/bolo2rrd.service
 	install -m 0755 -D /srv/redhat/systemd/dbolo.service       $RPM_BUILD_ROOT%{_unitdir}/dbolo.service
 %else
-	install -m 0755 -D redhat/init.d/dbolo      $RPM_BUILD_ROOT%{_initrddir}/dbolo
-	install -m 0755 -D redhat/init.d/bolo       $RPM_BUILD_ROOT%{_initrddir}/bolo
-	install -m 0755 -D redhat/init.d/bolo2rrd   $RPM_BUILD_ROOT%{_initrddir}/bolo2rrd
-	install -m 0755 -D redhat/init.d/bolo2redis $RPM_BUILD_ROOT%{_initrddir}/bolo2redis
-	install -m 0755 -D redhat/init.d/bolo2pg    $RPM_BUILD_ROOT%{_initrddir}/bolo2pg
-	install -m 0755 -D redhat/init.d/bolo2meta  $RPM_BUILD_ROOT%{_initrddir}/bolo2meta
+	install -m 0755 -D /srv/redhat/sysvinit/dbolo      $RPM_BUILD_ROOT%{_initrddir}/dbolo
+	install -m 0755 -D /srv/redhat/sysvinit/bolo       $RPM_BUILD_ROOT%{_initrddir}/bolo
+	install -m 0755 -D /srv/redhat/sysvinit/bolo2rrd   $RPM_BUILD_ROOT%{_initrddir}/bolo2rrd
+	install -m 0755 -D /srv/redhat/sysvinit/bolo2redis $RPM_BUILD_ROOT%{_initrddir}/bolo2redis
+	install -m 0755 -D /srv/redhat/sysvinit/bolo2pg    $RPM_BUILD_ROOT%{_initrddir}/bolo2pg
+	install -m 0755 -D /srv/redhat/sysvinit/bolo2meta  $RPM_BUILD_ROOT%{_initrddir}/bolo2meta
 %endif
 ln -s %{_bindir}/bolo $RPM_BUILD_ROOT%{_sbindir}/bolo
 
