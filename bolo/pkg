@@ -18,7 +18,6 @@ curl -LO ${SOURCE_URL}
 
 tar -xzf $ARCHIVE
 pushd ${NAME}-${VERSION}
-sed -i -e 's/$BOLO $OPTIONS/$BOLO aggr $OPTIONS/' redhat/init.d/bolo
 sed -i -e 's/^dumpfiles/#dumpfiles/' examples/bolo.conf
 echo '@20s /usr/lib/bolo/collectors/linux' > examples/dbolo.conf
 popd
