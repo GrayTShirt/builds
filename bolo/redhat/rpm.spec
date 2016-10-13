@@ -119,6 +119,7 @@ fi
 %doc %{_datadir}/bolo
 %config %{_sysconfdir}/bolo.conf
 %{_mandir}/man5/bolo.conf.5.gz
+%{_mandir}/man1/bolo.1.gz
 %{_mandir}/man1/bolo-aggr.1.gz
 %{_mandir}/man1/bolo-cache.1.gz
 %{_mandir}/man1/bolo-forget.1.gz
@@ -362,6 +363,7 @@ This package provides the console subscriber component for bolo.
 %files console-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2console
+%{_mandir}/man8/bolo2console.8.gz
 
 
 #######################################################################
@@ -379,6 +381,7 @@ This package provides the log subscriber component for bolo.
 %files log-subscriber
 %defattr(-,root,root,-)
 %{_sbindir}/bolo2log
+%{_mandir}/man8/bolo2log.8.gz
 
 
 #######################################################################
