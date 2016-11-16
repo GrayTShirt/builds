@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 NAME=bolo
-VERSION=0.2.18
+VERSION=0.3.0
 ARCHIVE=${NAME}-${VERSION}.tar.gz
 SOURCE_URL=https://github.com/bolo/${NAME}/releases/download/v${VERSION}/${ARCHIVE}
 
@@ -65,7 +65,8 @@ case ${FLAVOR} in
     rrdtool-devel \
     postgresql-devel \
     libhiredis-devel \
-    ncurses-devel
+    ncurses-devel \
+	libcurl-devel
 
   cp ${ARCHIVE} ${HOME}/rpm
   rpmbuild -ba /srv/redhat/rpm.spec

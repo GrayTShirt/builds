@@ -1,0 +1,128 @@
+#!/bin/bash
+#
+# bolo2slack - Start up the Bolo Slack subscriber
+#
+# chkconfig: 345 99 01
+# description: Bolo is a monitoring system and toolkit. \
+#              This service starts up the Slack subscriber.
+#
+# processname: bolo2slack
+# config: /etc/bolo2slack.conf
+# pidfile: /var/run/bolo2slack.pid
+
+### BEGIN INIT INFO
+# Provides:          bolo2slack
+# Required-Start:    $local_fs $network $syslog
+# Required-Stop:     $local_fs $syslog
+# Should-Start:
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start up the Bolo Monitoring daemon
+# Description:       Bolo is a monitoring system and toolkit.
+#                    This service starts up the Slack subscriber.
+### END INIT INFO
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+# pull in sysconfig settings
+[ -f /etc/sysconfig/bolo2slack ] && . /etc/sysconfig/bolo2slack
+
+RETVAL=0
+prog="bolo2slack"
+lockfile=/var/lock/subsys/$prog
+
+# Some functions to make the below more readable
+BOLO2SLACK=/usr/sbin/bolo2slack
+PID_FILE=/var/run/bolo2slack.pid
+
+start()
+{
+	[ -x $BOLO2SLACK ] || exit 5
+
+	echo -n $"Starting $prog: "
+	$BOLO2SLACK $OPTIONS && success || failure
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch $lockfile
+	echo
+	return $RETVAL
+}
+
+stop()
+{
+	echo -n $"Stopping $prog: "
+	killproc -p $PID_FILE $BOLO2SLACK
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && rm -f $lockfile
+	echo
+}
+
+reload()
+{
+	echo -n $"Reloading $prog: "
+	killproc -p $PID_FILE $BOLO2SLACK -HUP
+	RETVAL=$?
+	echo
+}
+
+restart() {
+	stop
+	start
+}
+
+force_reload() {
+	restart
+}
+
+rh_status() {
+	status -p $PID_FILE bolo2slack
+}
+
+rh_status_q() {
+	rh_status >/dev/null 2>&1
+}
+
+case "$1" in
+	start)
+		rh_status_q && exit 0
+		start
+		;;
+	stop)
+		if ! rh_status_q; then
+			rm -f $lockfile
+			exit 0
+		fi
+		stop
+		;;
+	restart)
+		restart
+		;;
+	reload)
+		rh_status_q || exit 7
+		reload
+		;;
+	force-reload)
+		force_reload
+		;;
+	condrestart|try-restart)
+		rh_status_q || exit 0
+		if [ -f $lockfile ] ; then
+			stop
+			# avoid race
+			sleep 3
+			start
+		fi
+		;;
+	status)
+		rh_status
+		RETVAL=$?
+		if [ $RETVAL -eq 3 -a -f $lockfile ] ; then
+			RETVAL=2
+		fi
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart|reload|force-reload|condrestart|try-restart|status}"
+		RETVAL=2
+esac
+exit $RETVAL
